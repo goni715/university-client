@@ -1,49 +1,35 @@
 import { Layout, Menu, MenuProps, theme } from "antd";
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { createElement } from "react";
-import { Outlet } from "react-router-dom";
+import { UploadOutlined } from '@ant-design/icons';
+import { NavLink, Outlet } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-// const items = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-//     (icon, index) => ({
-//       key: String(index + 1),
-//       icon: createElement(icon),
-//       label: `nav ${index + 1}`,
-//     }),
-//   );
 
 
 const items: MenuProps['items'] = [
   {
-    key: '1',
+    key: 'Dashboard',
     icon: <UploadOutlined/>,
-    label: 'Nav 01'
+    label: <NavLink to="/admin/dashboard">Dashbaord</NavLink>
   },
   {
-    key: '2',
+    key: 'user',
     icon: <UploadOutlined/>,
-    label: 'Nav 02',
+    label: 'User Management',
     children: [
       {
-        key:'sub-1',
-        label: 'sub 01',
+        key:'/create-admin',
+        label: <NavLink to="/admin/create-admin">Create Admin</NavLink>,
       },
       {
-        key:'sub-2',
-        label: 'sub 02',
+        key:'/create-faculty',
+        label: <NavLink to="/admin/create-faculty">Create Faculty</NavLink>,
+      },
+      {
+        key:'/create-student',
+        label: <NavLink to="/admin/create-student">Create Student</NavLink>,
       },
     ]
-  },
-  {
-    key: '3',
-    icon: <UploadOutlined/>,
-    label: 'Nav 03'
-  },
-  {
-    key: '4',
-    icon: <UploadOutlined/>,
-    label: 'Nav 04'
   }
 ]
 
@@ -83,7 +69,7 @@ const MainLayout = () => {
             <Menu
               theme="dark"
               mode="inline"
-              defaultSelectedKeys={["4"]}
+              defaultSelectedKeys={["Dashboard"]}
               items={items}
             />
           </Sider>
