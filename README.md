@@ -1,1 +1,1 @@
-# new-repository
+# University Management with Typescript
