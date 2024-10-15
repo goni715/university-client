@@ -69,33 +69,33 @@ export const adminSidebarItems = adminPaths.reduce((acc: TSidebarItem[], item)=>
 
 
 
-type TRoute = {
-  path: string;
-  element: ReactNode;
-}
+// type TRoute = {
+//   path: string;
+//   element: ReactNode;
+// }
 
 
-//* dynamically
-export const adminRoutes = adminPaths.reduce((acc: TRoute[], item)=> {
-  if(item.path && item.element){
-    acc.push({
-      path: item.path,
-      element: item.element
-    })
-  }
+// //* dynamically
+// export const adminRoutes = adminPaths.reduce((acc: TRoute[], item)=> {
+//   if(item.path && item.element){
+//     acc.push({
+//       path: item.path,
+//       element: item.element
+//     })
+//   }
 
-  if(item?.children){
-    item.children.forEach((child)=> {
-      acc.push({
-        path: child.path,
-        element: child.element
-      })
-    })
-  }
+//   if(item?.children){
+//     item.children.forEach((child)=> {
+//       acc.push({
+//         path: child.path,
+//         element: child.element
+//       })
+//     })
+//   }
 
-  return acc;
+//   return acc;
 
-}, [])
+// }, [])
 
 
 
