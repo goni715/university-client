@@ -1,38 +1,40 @@
 import { Layout, Menu, MenuProps, theme } from "antd";
-import { UploadOutlined } from '@ant-design/icons';
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { adminSidebarItems } from "../../routes/adminRoutes";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 
 
-const items: MenuProps['items'] = [
-  {
-    key: 'Dashboard',
-    icon: <UploadOutlined/>,
-    label: <NavLink to="/admin/dashboard">Dashbaord</NavLink>
-  },
-  {
-    key: 'user',
-    icon: <UploadOutlined/>,
-    label: 'User Management',
-    children: [
-      {
-        key:'/create-admin',
-        label: <NavLink to="/admin/create-admin">Create Admin</NavLink>,
-      },
-      {
-        key:'/create-faculty',
-        label: <NavLink to="/admin/create-faculty">Create Faculty</NavLink>,
-      },
-      {
-        key:'/create-student',
-        label: <NavLink to="/admin/create-student">Create Student</NavLink>,
-      },
-    ]
-  }
-]
+// const items: MenuProps['items'] = [
+//   {
+//     key: 'Dashboard',
+//     icon: <UploadOutlined/>,
+//     label: <NavLink to="/admin/dashboard">Dashbaord</NavLink>
+//   },
+//   {
+//     key: 'user',
+//     icon: <UploadOutlined/>,
+//     label: 'User Management',
+//     children: [
+//       {
+//         key:'/create-admin',
+//         label: <NavLink to="/admin/create-admin">Create Admin</NavLink>,
+//       },
+//       {
+//         key:'/create-faculty',
+//         label: <NavLink to="/admin/create-faculty">Create Faculty</NavLink>,
+//       },
+//       {
+//         key:'/create-student',
+//         label: <NavLink to="/admin/create-student">Create Student</NavLink>,
+//       },
+//     ]
+//   }
+// ]
 
+
+const items: MenuProps['items'] = adminSidebarItems;
 
 
 const MainLayout = () => {
@@ -48,10 +50,10 @@ const MainLayout = () => {
             breakpoint="lg"
             collapsedWidth="0"
             onBreakpoint={(broken) => {
-              console.log(broken);
+              //console.log(broken);
             }}
             onCollapse={(collapsed, type) => {
-              console.log(collapsed, type);
+              //console.log(collapsed, type);
             }}
           >
             {/* logo part */}
