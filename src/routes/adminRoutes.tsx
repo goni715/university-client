@@ -5,7 +5,7 @@ import CreateStudentPage from "../pages/admin/CreateStudentPage";
 
 export const adminPaths = [
   {
-    label: "Dashoboard",
+    label: "Dashboard",
     path: "dashboard",
     element: <AdminDashboardPage />,
   },
