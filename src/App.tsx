@@ -1,9 +1,10 @@
+import MainLayout from "./components/layout/MainLayout";
 
 
 const App = () => {
   return (
     <>
-      <h1>University Management system</h1>
+      <MainLayout/>
     </>
   );
 };
