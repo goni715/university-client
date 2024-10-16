@@ -1,17 +1,30 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authSliceReducer from '../features/auth/authSlice'
 import { baseApi } from '../features/api/baseApi'
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+ 
+
+const persistConfig = {
+  key: 'auth',
+  storage
+}
+
+
+const persistedAuthReducer = persistReducer(persistConfig, authSliceReducer);
 
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath] : baseApi.reducer,
-    auth: authSliceReducer
+    auth: persistedAuthReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware)
 })
 
+
+export const persistor = persistStore(store);
 
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
