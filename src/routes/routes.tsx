@@ -1,7 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import AboutPage from "../pages/AboutPage";
-import ContactPage from "../pages/ContactPage";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import routesGenerator from "../utils/routesGenerator";
@@ -13,16 +11,6 @@ const router = createBrowserRouter([
     {
       path: "/", //absolute path
       element: <App />,
-      children: [
-        {
-          path: "about", //relative path
-          element: <AboutPage />,
-        },
-        {
-          path: "contact",
-          element: <ContactPage />,
-        },
-      ],
     },
     {
       path: "/admin", 
