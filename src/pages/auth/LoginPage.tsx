@@ -4,9 +4,13 @@ import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hook/hook";
 import { setUser } from "../../redux/features/auth/authSlice";
 import verifyToken from "../../utils/verifyToken";
+import { toast, Toaster } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
 
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { register, handleSubmit } = useForm({
       defaultValues: {
@@ -18,9 +22,17 @@ const LoginPage = () => {
     const [login, {data, isLoading, error} ] = useLoginMutation();
 
     const onSubmit = async(data) => {
-        const res = await login(data).unwrap();
-        const user = verifyToken(res.data.accessToken);
-        dispatch(setUser({ user: user, token:res.data.accessToken}));
+       const toastId = LoadingToast('Processing...');
+
+        try{
+            const res = await login(data).unwrap();
+            const user = verifyToken(res.data.accessToken);
+            dispatch(setUser({ user: user, token:res.data.accessToken}));
+            SuccessToast('Login Success', toastId);
+           // navigate(`/${user?.role}/dashboard`)
+        }catch(err:any){
+            ErrorToast('Something Went Wrong', toastId)
+        }
     }
 
 
@@ -40,6 +52,7 @@ const LoginPage = () => {
                 </div>
                 <Button htmlType="submit">Login</Button>
             </form>
+
         </>
     );
 };

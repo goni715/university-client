@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store/store";
 
+type TUser = {
+  userId(pin): string;
+  role(pin): "admin";
+  iat(pin): 1729161773;
+  exp(pin): 1729248173;
+};
+
 type TAuthState = {
     user: null | object;
     token: null | string;
