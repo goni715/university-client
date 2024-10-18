@@ -2,7 +2,14 @@ import { Input } from "antd";
 import { Controller } from "react-hook-form";
 
 
-const PHInput = ({type, name, label}) => {
+type TInputProps = {
+    type: string;
+    name: string;
+    label: string;
+}
+
+
+const PHInput = ({ type, name, label } : TInputProps) => {
     //const { register } = useFormContext();
 
     return (

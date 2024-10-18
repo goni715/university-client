@@ -15,6 +15,11 @@ const LoginPage = () => {
     const dispatch = useAppDispatch();
     const [login] = useLoginMutation();
 
+    const defaultValues = {
+        id: 'A-0001',
+        password: '123456'
+    }
+
     const onSubmit = async(data: FieldValues) => {
        const toastId = LoadingToast('Processing...');
 
@@ -24,8 +29,15 @@ const LoginPage = () => {
             dispatch(setUser({ user: user, token:res.data.accessToken}));
             SuccessToast('Login Success', toastId);
             navigate(`/${user?.role}/dashboard`)
-        }catch(err:any){
-            ErrorToast('Something Went Wrong', toastId)
+        }catch(err: any){
+            if(err?.status === 404){
+                ErrorToast('Couild not find this ID', toastId)
+            }
+            else if(err?.status === 403){
+                ErrorToast('Wrong Password', toastId)
+            }else{
+                ErrorToast('Something Went Wrong', toastId)
+            }
         }
     }
 
@@ -35,7 +47,7 @@ const LoginPage = () => {
     return (
       <>
         <Row justify="center" align="middle" style={{ height: '100vh' }}>
-          <PHForn onSubmit={onSubmit}>
+          <PHForn onSubmit={onSubmit} defaultValues={defaultValues}>
               <PHInput type="text" name="id" label="ID" />
               <PHInput type="password" name="password" label="Password" />
             <Button htmlType="submit">Login</Button>

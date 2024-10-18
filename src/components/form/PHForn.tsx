@@ -1,8 +1,23 @@
-import { FormProvider, useForm } from "react-hook-form";
+import { ReactNode } from "react";
+import { FieldValues, FormProvider, SubmitHandler, useForm } from "react-hook-form";
+
+type TFormConfig = {
+  defaultValues?: Record<string, unknown>;
+}
+
+type TFormProps = {
+  onSubmit: SubmitHandler<FieldValues>;
+  children: ReactNode;
+} & TFormConfig; //type intersection
 
 
-const PHForn = ({onSubmit, children}) => {
-    const methods = useForm()
+const PHForn = ({onSubmit, children, defaultValues } : TFormProps) => {
+    const formConfig : TFormConfig = {}
+    if(defaultValues){
+      formConfig['defaultValues'] = defaultValues;
+    }
+    const methods = useForm(formConfig);
+    
     return (
         <>
            <FormProvider {...methods}>
