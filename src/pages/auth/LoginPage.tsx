@@ -18,7 +18,7 @@ const LoginPage = () => {
       },
     });
 
-    const [login, {isLoading}] = useLoginMutation();
+    const [login] = useLoginMutation();
 
     const onSubmit = async(data: FieldValues) => {
        const toastId = LoadingToast('Processing...');
