@@ -13,8 +13,8 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>  
          <RouterProvider router={router} />
+         <Toaster richColors position="top-right"/>
       </PersistGate>
     </Provider>
-    <Toaster richColors position="top-right"/>
   </StrictMode>,
 )

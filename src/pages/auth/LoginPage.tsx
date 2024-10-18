@@ -18,17 +18,18 @@ const LoginPage = () => {
       },
     });
 
-    const [login] = useLoginMutation();
+    const [login, {isLoading}] = useLoginMutation();
 
     const onSubmit = async(data: FieldValues) => {
        const toastId = LoadingToast('Processing...');
+       console.log(data);
 
         try{
             const res = await login(data).unwrap();
             const user = verifyToken(res.data.accessToken) as TUser;
             dispatch(setUser({ user: user, token:res.data.accessToken}));
             SuccessToast('Login Success', toastId);
-           navigate(`/${user?.role}/dashboard`)
+            navigate(`/${user?.role}/dashboard`)
         }catch(err:any){
             ErrorToast('Something Went Wrong', toastId)
         }
