@@ -3,10 +3,10 @@ import { useGetAllSemestersQuery } from "../../redux/features/academicSemester/a
 
 
 interface DataType {
-    key: React.Key;
     name: string;
-    age: number;
-    address: string;
+    year: string;
+    startMonth: string;
+    endMonth: string;
 }
 
 
