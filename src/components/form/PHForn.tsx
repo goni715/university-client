@@ -4,6 +4,7 @@ import { FieldValues, FormProvider, SubmitHandler, useForm } from "react-hook-fo
 
 type TFormConfig = {
   defaultValues?: Record<string, unknown>;
+  resolver: any;
 }
 
 type TFormProps = {
@@ -12,11 +13,22 @@ type TFormProps = {
 } & TFormConfig; //type intersection
 
 
-const PHForn = ({onSubmit, children, defaultValues } : TFormProps) => {
-    const formConfig : TFormConfig = {}
+//type AcademicSemesterSchemaType = z.infer<typeof AcademicSemesterSchema>;
+
+
+
+const PHForn = ({onSubmit, children, defaultValues, resolver } : TFormProps) => {
+    const formConfig : TFormConfig = {
+      resolver: null
+    }
     if(defaultValues){
       formConfig['defaultValues'] = defaultValues;
     }
+
+    if(resolver){
+      formConfig['resolver'] = resolver;
+    }
+
     const methods = useForm(formConfig);
     
     return (
