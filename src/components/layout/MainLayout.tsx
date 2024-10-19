@@ -31,8 +31,6 @@ const MainLayout = () => {
                 style={{
                   padding: 24,
                   minHeight: 360,
-                  background: colorBgContainer,
-                  borderRadius: borderRadiusLG,
                 }}
               >
                 <Outlet/>
