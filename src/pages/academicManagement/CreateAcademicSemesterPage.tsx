@@ -6,6 +6,8 @@ import { semesterOptions } from "../../constants/semester";
 import { monthOptions } from "../../constants/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AcademicSemesterSchema } from "../../schemas/academicManagement.schema";
+import { useAddAcademicSemesterMutation } from "../../redux/features/academicSemester/academicSemesterApi";
+import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
 
 
 
@@ -19,8 +21,9 @@ const yearOptions = [0, 1, 2, 3, 4].map((item)=> ({
 
 
 const CreateAcademicSemesterPage = () => {
+  const [ addAcademicSemester ] = useAddAcademicSemesterMutation()
 
-    const onSubmit : SubmitHandler<FieldValues> = (data) => {
+  const onSubmit : SubmitHandler<FieldValues> = async (data) => {
       const name = semesterOptions[Number(data?.name) -1 ]?.label;
       const semesterData = {
         name,
@@ -29,9 +32,21 @@ const CreateAcademicSemesterPage = () => {
         startMonth: data.startMonth,
         endMonth: data.endMonth,
       }
-     // console.log(data);
-      console.log(semesterData);
+
+     const toastId = LoadingToast('Processing...') 
+
+    try {
+      const res = await addAcademicSemester(semesterData).unwrap();
+      SuccessToast("Academic Semester Create Success", toastId);
+
+    } catch (err: any) {
+      if (err?.status === 409) {
+        ErrorToast("This Semester is already existed", toastId);
+      } else {
+        ErrorToast("Something Went Wrong", toastId);
+      }
     }
+  }
 
 
 

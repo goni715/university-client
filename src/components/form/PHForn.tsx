@@ -4,7 +4,7 @@ import { FieldValues, FormProvider, SubmitHandler, useForm } from "react-hook-fo
 
 type TFormConfig = {
   defaultValues?: Record<string, unknown>;
-  resolver: any;
+  resolver?: any;
 }
 
 type TFormProps = {
