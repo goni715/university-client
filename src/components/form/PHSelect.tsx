@@ -1,9 +1,16 @@
 import { Form, Select } from "antd";
 import { Controller } from "react-hook-form";
 
+type TPHSelectProps = {
+  name: string;
+  label: string;
+  options: { value: string; label: string; disabled?: boolean}[]
+}
 
-const PHSelect = ({name, label }) => {
+
+const PHSelect = ({name, label, options } : TPHSelectProps) => {
  
+
 
     return (
       <>
@@ -14,20 +21,8 @@ const PHSelect = ({name, label }) => {
               <Form.Item label={label}>
                 <Select
                   {...field}
-                  options={[
-                    {
-                      value: "Autumn",
-                      label: "Autumn",
-                    },
-                    {
-                      value: "Summer",
-                      label: "Summer",
-                    },
-                    {
-                      value: "Fall",
-                      label: "Fall",
-                    },
-                  ]}
+                  options={options}
+                  size="large"
                 />
               </Form.Item>
             )}
