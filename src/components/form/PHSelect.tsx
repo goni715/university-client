@@ -1,33 +1,37 @@
 import { Form, Select } from "antd";
+import { Controller } from "react-hook-form";
 
 
-const PHSelect = ({ label }) => {
-    const handleChange = (value) => {
-        console.log(`selected ${value}`);
-    };
+const PHSelect = ({name, label }) => {
+ 
 
     return (
       <>
         <div style={{ marginBottom: "20px" }}>
-          <Form.Item label={label}>
-            <Select
-              onChange={handleChange}
-              options={[
-                {
-                  value: "Autumn",
-                  label: "Autumn",
-                },
-                {
-                  value: "Summer",
-                  label: "Summer",
-                },
-                {
-                  value: "Fall",
-                  label: "Fall",
-                },
-              ]}
-            />
-          </Form.Item>
+          <Controller
+            name={name}
+            render={({ field }) => (
+              <Form.Item label={label}>
+                <Select
+                  {...field}
+                  options={[
+                    {
+                      value: "Autumn",
+                      label: "Autumn",
+                    },
+                    {
+                      value: "Summer",
+                      label: "Summer",
+                    },
+                    {
+                      value: "Fall",
+                      label: "Fall",
+                    },
+                  ]}
+                />
+              </Form.Item>
+            )}
+          />
         </div>
       </>
     );
