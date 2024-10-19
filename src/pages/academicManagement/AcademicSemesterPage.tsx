@@ -1,5 +1,6 @@
-import { Table, TableColumnsType } from "antd";
+import { Table, TableColumnsType, TableProps } from "antd";
 import { useGetAllSemestersQuery } from "../../redux/features/academicSemester/academicSemesterApi";
+import { useState } from "react";
 
 
 interface DataType {
@@ -11,12 +12,13 @@ interface DataType {
 
 
 const AcademicSemesterPage = () => {
-    const { data: semesterData } = useGetAllSemestersQuery(undefined);
+    const [params, setParams] = useState([]);
+    const { data: semesterData } = useGetAllSemestersQuery(params);
 
-    const tableData = semesterData?.data?.map(({ _id, name, code, year, startMonth, endMonth})=> ({
+    const tableData = semesterData?.data?.map(({ _id, name, year, startMonth, endMonth})=> ({
         id: _id,
+        key:_id,
         name,
-        code,
         year,
         startMonth,
         endMonth
@@ -27,58 +29,77 @@ const AcademicSemesterPage = () => {
       const columns: TableColumnsType<DataType> = [
         {
           title: 'Name',
+          key: "name",
           dataIndex: 'name',
           showSorterTooltip: { target: 'full-header' },
           filters: [
             {
-              text: 'Joe',
-              value: 'Joe',
+              text: 'Autumn',
+              value: 'Autumn',
             },
             {
-              text: 'Jim',
-              value: 'Jim',
+              text: 'Summer',
+              value: 'Summer',
             },
             {
-              text: 'Submenu',
-              value: 'Submenu',
-              children: [
-                {
-                  text: 'Green',
-                  value: 'Green',
-                },
-                {
-                  text: 'Black',
-                  value: 'Black',
-                },
-              ],
-            },
-          ],
-          // specify the condition of filtering result
-          // here is that finding the name started with `value`
-          onFilter: (value, record) => record.name.indexOf(value as string) === 0,
-          sorter: (a, b) => a.name.length - b.name.length,
-          sortDirections: ['descend'],
+              text: 'Fall',
+              value: 'Fall',
+            }
+          ]
         },
         {
           title: 'Year',
+          key: "year",
           dataIndex: 'year',
+          filters: [
+            {
+              text: '2024',
+              value: '2024',
+            },
+            {
+              text: '2025',
+              value: '2025',
+            },
+            {
+              text: '2027',
+              value: '2027',
+            }
+          ]
         },
         {
           title: 'Start Month',
+          key: "startMonth",
           dataIndex: 'startMonth'
         },
         {
             title: 'End Month',
+            key: "endMonth",
             dataIndex: 'endMonth'
           },
       ];
 
  
+      const onChange : TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+        //console.log('params', pagination, filters, sorter, extra);
+        //console.log({filters, extra});
+        if(extra.action === 'filter'){
+          const queryParams : any[] = [];
+          filters.name?.forEach((item)=> {
+            queryParams.push({ name: 'name', value: item })
+          });
+
+          filters.year?.forEach((item)=> {
+            queryParams.push({ name: 'year', value: item })
+          });
+
+          setParams(queryParams);
+        }
+      };
 
 
     return (
       <>
-        <Table columns={columns} dataSource={tableData} />
+        <Table columns={columns} dataSource={tableData} onChange={onChange} />
       </>
     );
 };
