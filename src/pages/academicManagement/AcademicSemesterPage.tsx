@@ -32,7 +32,6 @@ const AcademicSemesterPage = () => {
           title: 'Name',
           key: "name",
           dataIndex: 'name',
-          showSorterTooltip: { target: 'full-header' },
           filters: [
             {
               text: 'Autumn',
@@ -79,7 +78,7 @@ const AcademicSemesterPage = () => {
         },
         {
             title: 'Action',
-            key: "endMonth",
+            key: "action",
             dataIndex: 'action',
             render: () => (
               <>
