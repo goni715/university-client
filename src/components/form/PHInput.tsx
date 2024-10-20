@@ -18,7 +18,7 @@ const PHInput = ({ type, name, label } : TInputProps) => {
             name={name}
             render={({ field, fieldState: { error } }) => (
               <Form.Item label={label}>
-                <Input {...field} type={type} id={name} size="large" />
+                <Input {...field} type={type} id={name} size="large" status={`${error! && 'error'}`} />
                 {error && (
                   <span style={{ color: "red" }}>
                     {error.message as string}
