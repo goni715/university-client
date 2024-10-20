@@ -14,3 +14,13 @@ export const AcademicSemesterSchema = z.object({
       required_error: "Please select a End Month"
     })
   });
+
+
+
+export const AcademicFacultySchema = z.object({
+    name: z.string({
+      required_error: "Name is required !"
+    }).min(1, { message: "Name is required !" })
+})
+
+

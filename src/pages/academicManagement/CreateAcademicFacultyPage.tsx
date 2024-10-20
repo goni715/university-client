@@ -3,20 +3,13 @@ import PHForn from "../../components/form/PHForn";
 import { FieldValues } from "react-hook-form";
 import PHInput from "../../components/form/PHInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useAddAcademicFacultyMutation } from "../../redux/features/academicFaculty/academicFacultyApi";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
+import { AcademicFacultySchema } from "../../schemas/academicManagement.schema";
 
 
 const CreateAcademicFacultyPage = () => {
   const [addAcademicFaculty] = useAddAcademicFacultyMutation()
-
-  const AcademicFacultySchema = z.object({
-    name: z.string({
-      required_error: "Name is required !"
-    }).min(1, { message: "Name is required !" })
-  })
-
 
   
   const onSubmit = async (data: FieldValues) => {

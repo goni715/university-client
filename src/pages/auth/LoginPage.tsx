@@ -1,4 +1,4 @@
-import { Button, Row } from "antd";
+import { Button, Col, Flex} from "antd";
 import { FieldValues } from "react-hook-form";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hook/hook";
@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
 import PHForn from "../../components/form/PHForn";
 import PHInput from "../../components/form/PHInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "../../schemas/auth.schema";
 
 
 const LoginPage = () => {
@@ -34,7 +36,7 @@ const LoginPage = () => {
                 ErrorToast('Couild not find this ID', toastId)
             }
             else if(err?.status === 403){
-                ErrorToast('Wrong Password', toastId)
+                ErrorToast(err?.data?.message, toastId)
             }else{
                 ErrorToast('Something Went Wrong', toastId)
             }
@@ -46,13 +48,15 @@ const LoginPage = () => {
 
     return (
       <>
-        <Row justify="center" align="middle" style={{ height: '100vh' }}>
-          <PHForn onSubmit={onSubmit} defaultValues={defaultValues}>
+       <Flex justify="center" align="center" style={{ height: '100vh' }}>
+          <Col span={6}>
+          <PHForn onSubmit={onSubmit} defaultValues={defaultValues} resolver={zodResolver(LoginSchema)}>
               <PHInput type="text" name="id" label="ID" />
               <PHInput type="password" name="password" label="Password" />
             <Button htmlType="submit">Login</Button>
           </PHForn>
-        </Row>
+          </Col>
+        </Flex>
       </>
     );
 };
