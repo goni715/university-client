@@ -1,4 +1,4 @@
-import { Button, Layout,theme } from "antd";
+import { Button, Layout } from "antd";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useAppDispatch } from "../../redux/hook/hook";
@@ -9,9 +9,6 @@ const { Header, Content} = Layout;
 
 const MainLayout = () => {
   const dispatch = useAppDispatch();
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-      } = theme.useToken();
 
     const handleLogout = ()=> {
       dispatch(logout())
@@ -23,7 +20,7 @@ const MainLayout = () => {
         <Layout style={{ height: '100%' }}>
           <Sidebar/>
           <Layout>
-            <Header> 
+            <Header style={{position: 'sticky', top:0, zIndex: '999'}}> 
               <Button onClick={handleLogout}>Logout</Button> 
             </Header>
             <Content style={{ margin: "24px 16px 0" }}>
