@@ -20,7 +20,7 @@ const PHSelect = ({name, label, options } : TPHSelectProps) => {
             name={name}
             render={({ field }) => (
               <Form.Item label={label}>
-                <Select {...field} options={options} size="large" />
+                <Select {...field} options={options} size="large" placeholder="Select"/>
                 {errors[name] && (
                   <span style={{ color: "red"}}>
                     {errors[name]?.message as string}
