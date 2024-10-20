@@ -27,6 +27,7 @@ const CreateAcademicDepartmentPage = () => {
     try {
       await addAcademicDepartment(data).unwrap();
       SuccessToast("Academic Department Create Success", toastId);
+      return true;
     } catch (err: any) {
       if (err?.status === 400) {
         ErrorToast("This Department existed", toastId);

@@ -1,5 +1,5 @@
 import { Button, Col, Flex } from "antd";
-import { FieldValues } from "react-hook-form";
+import { FieldValues, useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ErrorToast,
@@ -14,11 +14,13 @@ import { useAddAcademicFacultyMutation } from "../../../redux/features/admin/aca
 const CreateAcademicFacultyPage = () => {
   const [addAcademicFaculty] = useAddAcademicFacultyMutation();
 
+
   const onSubmit = async (data: FieldValues) => {
     const toastId = LoadingToast("Creating...");
     try {
       await addAcademicFaculty(data).unwrap();
       SuccessToast("Academic Faculty Create Success", toastId);
+      return true;
     } catch (err: any) {
       if (err?.status === 400) {
         ErrorToast("This Faculty existed", toastId);

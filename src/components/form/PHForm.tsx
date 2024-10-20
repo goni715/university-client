@@ -30,11 +30,21 @@ const PHForm = ({onSubmit, children, defaultValues, resolver } : TFormProps) => 
     }
 
     const methods = useForm(formConfig);
+
+    //form-submit
+    const submit = async (data : FieldValues) => {
+     const result = await onSubmit(data);
+     if(result===true){
+      methods.reset()
+     }
+    }
+
+
     
     return (
         <>
            <FormProvider {...methods}>
-             <Form layout="vertical" onFinish={methods.handleSubmit(onSubmit)}>
+             <Form layout="vertical" onFinish={methods.handleSubmit(submit)}>
              {children}
              </Form>
            </FormProvider> 

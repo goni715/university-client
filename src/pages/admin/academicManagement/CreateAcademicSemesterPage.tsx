@@ -38,7 +38,7 @@ const CreateAcademicSemesterPage = () => {
     try {
       await addAcademicSemester(semesterData).unwrap();
       SuccessToast("Academic Semester Create Success", toastId);
-
+      return true;
     } catch (err: any) {
       if (err?.status === 409) {
         ErrorToast("This Semester is already existed", toastId);
