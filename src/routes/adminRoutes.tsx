@@ -5,9 +5,9 @@ import CreateAcademicDepartmentPage from "../pages/admin/academicManagement/Crea
 import CreateAcademicFacultyPage from "../pages/admin/academicManagement/CreateAcademicFacultyPage";
 import CreateAcademicSemesterPage from "../pages/admin/academicManagement/CreateAcademicSemesterPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
-import CreateAdminPage from "../pages/admin/CreateAdminPage";
-import CreateFacultyPage from "../pages/admin/CreateFacultyPage";
-import CreateStudentPage from "../pages/admin/CreateStudentPage";
+import CreateAdminPage from "../pages/admin/userManagement/CreateAdminPage";
+import CreateFacultyPage from "../pages/admin/userManagement/CreateFacultyPage";
+import CreateStudentPage from "../pages/admin/userManagement/CreateStudentPage";
 
 export const adminPaths = [
   {

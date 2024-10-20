@@ -5,6 +5,7 @@ import { facultyPaths } from "../../routes/facultyRoutes";
 import { studentPaths } from "../../routes/studentRoutes";
 import { useAppSelector } from "../../redux/hook/hook";
 import { selectUser } from "../../redux/features/auth/authSlice";
+import { useLocation } from "react-router-dom";
 
 const { Sider } = Layout;
 
@@ -16,6 +17,7 @@ const UserRole = {
 
 
 const Sidebar = () => {
+  const { pathname } = useLocation()
   const user = useAppSelector(selectUser);
   let sidebarItems;
 
@@ -32,6 +34,7 @@ const Sidebar = () => {
     default:
       break;
   }
+
  
     return (
       <>
@@ -55,7 +58,7 @@ const Sidebar = () => {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["Dashboard"]}
+            defaultSelectedKeys={[pathname]}
             items={sidebarItems}
           />
         </Sider>
