@@ -14,7 +14,7 @@ import PHForm from "../../../components/form/PHForm";
 import { useGetAllAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement/academicFaculty/academicFacultyApi";
 
 const CreateAcademicDepartmentPage = () => {
-  const { data: facultyData } = useGetAllAcademicFacultiesQuery(undefined);
+  const { data: facultyData, isLoading } = useGetAllAcademicFacultiesQuery(undefined);
   const academicFacultyOptions = facultyData?.data?.map((item) => ({
     value: item?._id,
     label: item?.name,
@@ -51,6 +51,7 @@ const CreateAcademicDepartmentPage = () => {
               name="academicFaculty"
               label="Academic Faculty"
               options={academicFacultyOptions}
+              disabled={isLoading}
             />
             <Button htmlType="submit">Submit</Button>
           </PHForm>

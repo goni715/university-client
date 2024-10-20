@@ -4,11 +4,12 @@ import { Controller, useFormContext } from "react-hook-form";
 type TPHSelectProps = {
   name: string;
   label: string;
-  options: { value: string; label: string; disabled?: boolean}[]
+  options: { value: string; label: string; disabled?: boolean}[] | undefined,
+  disabled?: boolean
 }
 
 
-const PHSelect = ({name, label, options } : TPHSelectProps) => {
+const PHSelect = ({name, label, options, disabled } : TPHSelectProps) => {
   const { formState: { errors } } = useFormContext()
  
 
@@ -20,7 +21,7 @@ const PHSelect = ({name, label, options } : TPHSelectProps) => {
             name={name}
             render={({ field }) => (
               <Form.Item label={label}>
-                <Select {...field} options={options} size="large" placeholder="Select"/>
+                <Select {...field} options={options} disabled={disabled} size="large" placeholder="Select"/>
                 {errors[name] && (
                   <span style={{ color: "red"}}>
                     {errors[name]?.message as string}
