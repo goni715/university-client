@@ -1,13 +1,13 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import PHForn from "../../components/form/PHForn";
 import { Button, Col, Flex } from "antd";
-import PHSelect from "../../components/form/PHSelect";
-import { semesterOptions } from "../../constants/semester";
-import { monthOptions } from "../../constants/global";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AcademicSemesterSchema } from "../../schemas/academicManagement.schema";
-import { useAddAcademicSemesterMutation } from "../../redux/features/academicSemester/academicSemesterApi";
-import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
+import { semesterOptions } from "../../../constants/semester";
+import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
+import PHForm from "../../../components/form/PHForm";
+import { AcademicSemesterSchema } from "../../../schemas/academicManagement.schema";
+import PHSelect from "../../../components/form/PHSelect";
+import { monthOptions } from "../../../constants/global";
+import { useAddAcademicSemesterMutation } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
 
 
 
@@ -36,7 +36,7 @@ const CreateAcademicSemesterPage = () => {
      const toastId = LoadingToast('Processing...') 
 
     try {
-      const res = await addAcademicSemester(semesterData).unwrap();
+      await addAcademicSemester(semesterData).unwrap();
       SuccessToast("Academic Semester Create Success", toastId);
 
     } catch (err: any) {
@@ -54,13 +54,13 @@ const CreateAcademicSemesterPage = () => {
       <>
         <Flex justify="center" align="center">
           <Col span={6}>
-            <PHForn onSubmit={onSubmit} resolver={zodResolver(AcademicSemesterSchema)}>
+            <PHForm onSubmit={onSubmit} resolver={zodResolver(AcademicSemesterSchema)}>
               <PHSelect name="name" label="Name" options={semesterOptions}/>
               <PHSelect name="year" label="Year" options={yearOptions}/>
               <PHSelect name="startMonth" label="Start Month" options={monthOptions} />
               <PHSelect name="endMonth" label="End Month" options={monthOptions} />
               <Button htmlType="submit">Submit</Button>
-            </PHForn>
+            </PHForm>
           </Col>
         </Flex>
       </>

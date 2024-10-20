@@ -1,7 +1,7 @@
 import { Button, Table, TableColumnsType, TableProps } from "antd";
-import { useGetAllSemestersQuery } from "../../redux/features/academicSemester/academicSemesterApi";
 import { useState } from "react";
-import { TQueryParam } from "../../types";
+import { TQueryParam } from "../../../types";
+import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
 
 
 interface DataType {

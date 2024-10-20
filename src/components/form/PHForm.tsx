@@ -17,7 +17,7 @@ type TFormProps = {
 
 
 
-const PHForn = ({onSubmit, children, defaultValues, resolver } : TFormProps) => {
+const PHForm = ({onSubmit, children, defaultValues, resolver } : TFormProps) => {
     const formConfig : TFormConfig = {
       resolver: null
     }
@@ -42,4 +42,4 @@ const PHForn = ({onSubmit, children, defaultValues, resolver } : TFormProps) => 
     );
 };
 
-export default PHForn;
+export default PHForm;
