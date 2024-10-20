@@ -4,6 +4,9 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import PHInput from "../../../components/form/PHInput";
 import PHSelect from "../../../components/form/PHSelect";
 import { bloodGroupOptions, genderOptions } from "../../../constants/global";
+import { useGetAllDepartmentsQuery } from "../../../redux/features/admin/academicManagement/academicDepartment/academicDepartmentApi";
+import PHDatePicker from "../../../components/form/PHDatePicker";
+import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
 
 const studentDummyData = {
   password: "",
@@ -43,6 +46,22 @@ const studentDummyData = {
 };
 
 const CreateStudentPage = () => {
+  const {
+    data: departmentData
+  } = useGetAllDepartmentsQuery(undefined);
+
+  const { data: semesterData, isLoading, isFetching } = useGetAllSemestersQuery(undefined);
+
+
+  const academicDepartmentOptions = departmentData?.data?.map((item) => ({
+    value: item?._id,
+    label: item?.name,
+  }));
+
+  const academicSemesterOptions = semesterData?.data?.map((item) => ({
+    value: item?._id,
+    label: `${item?.name} ${item?.year}`,
+  }));
 
 
   const onSubmit : SubmitHandler<FieldValues> = async ( data ) => {
@@ -71,7 +90,7 @@ const CreateStudentPage = () => {
                 <PHSelect name="gender" label="Gender" options={genderOptions} />
               </Col>
               <Col span={24} md={{span: 12}} lg={{span: 8}}>
-                <PHInput type="text" name="dateOfBirth" label="Date of Birth" />
+                <PHDatePicker name="dateOfBirth" label="Date of Birth" />
               </Col>
               <Col span={24} md={{span: 12}} lg={{span: 8}}>
                 <PHSelect name="bloodGroup" label="Blood Group" options={bloodGroupOptions} />
@@ -134,10 +153,10 @@ const CreateStudentPage = () => {
             <Divider>Academic Information</Divider>
             <Row gutter={8}>
               <Col span={24} md={{span: 12}} lg={{span: 8}}>
-                <PHInput type="text" name="admissionSemester" label="Admission Semester" />
+                <PHSelect name="admissionSemester" label="Admission Semester" options={academicSemesterOptions}/>
               </Col>
               <Col span={24} md={{span: 12}} lg={{span: 8}}>
-                <PHInput type="text" name="academicDepartment" label="Academic Department" />
+                <PHSelect name="academicDepartment" label="Academic Department" options={academicDepartmentOptions}/>
               </Col>
             </Row>
             <Button htmlType="submit">Submit</Button>

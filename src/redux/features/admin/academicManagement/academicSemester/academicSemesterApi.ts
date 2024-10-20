@@ -8,7 +8,7 @@ const academicSemesterApi = baseApi.injectEndpoints({
       query: (args) =>{
 
         const params = new URLSearchParams();
-        if(args.length > 0){
+        if(args !==undefined && args.length > 0){
           args.forEach((item: TQueryParam) => {
             params.append(item.name, item.value as string)
           });
