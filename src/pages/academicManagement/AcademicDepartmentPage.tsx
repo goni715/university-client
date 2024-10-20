@@ -1,8 +1,8 @@
 import { Button, Table, TableColumnsType, TableProps } from "antd";
-import { useGetAllSemestersQuery } from "../../redux/features/academicSemester/academicSemesterApi";
 import { useState } from "react";
 import { TQueryParam } from "../../types";
 import { useGetAllDepartmentsQuery } from "../../redux/features/academicDepartment/academicDepartmentApi";
+import { useGetAllAcademicFacultiesQuery } from "../../redux/features/academicFaculty/academicFacultyApi";
 
 
 interface DataType {
@@ -12,20 +12,35 @@ interface DataType {
     endMonth: string;
 }
 
+type TDepartmentData = {
+  _id: string;
+  name: string;
+  academicFaculty: Record<string, unknown>
+}
+
+
 
 const AcademicDepartmentPage = () => {
     const [params, setParams] = useState<TQueryParam[]>([]);
     const { data: departmentData, isLoading, isFetching } = useGetAllDepartmentsQuery(params);
+    const { data:facultyData } = useGetAllAcademicFacultiesQuery(undefined);
 
-    const tableData = departmentData?.data?.map(({ _id, name, academicFaculty, year, startMonth, endMonth})=> ({
+
+
+    const tableData = departmentData?.data?.map(({ _id, name, academicFaculty} : TDepartmentData)=> ({
         id: _id,
         key:_id,
         name,
         academicFacultyName: academicFaculty?.name,
-        year,
-        startMonth,
-        endMonth
     }));
+
+
+
+    const filtersArray = facultyData?.data?.map(({_id, name})=> ({
+       text: name,
+       value:_id
+    }));
+
 
 
       
@@ -33,55 +48,36 @@ const AcademicDepartmentPage = () => {
         {
           title: 'Name',
           key: "name",
-          dataIndex: 'name',
-          filters: [
-            {
-              text: 'Autumn',
-              value: 'Autumn',
-            },
-            {
-              text: 'Summer',
-              value: 'Summer',
-            },
-            {
-              text: 'Fall',
-              value: 'Fall',
-            }
-          ]
+          dataIndex: 'name'
         },
         {
-          title: 'Year',
-          key: "year",
+          title: 'Academic Faculty',
+          key: "academicFaculty",
           dataIndex: 'academicFacultyName',
-          filters: [
-            {
-              text: '2024',
-              value: '2024',
-            },
-            {
-              text: '2025',
-              value: '2025',
-            },
-            {
-              text: '2027',
-              value: '2027',
-            }
-          ]
-        }
+          filters: filtersArray
+        },
+        {
+          title: 'Action',
+          key: "action",
+          dataIndex: 'action',
+          render: () => (
+            <>
+            <div>
+              <Button>Update</Button>
+            </div>
+            </>
+          )
+      },
       ];
 
  
       const onChange : TableProps<DataType>['onChange'] = (_pagination, filters, _sorter, extra) => {
         //console.log('params', pagination, filters, sorter, extra);
-        //console.log({filters, extra});
+       // console.log({filters, extra});
         if(extra.action === 'filter'){
           const queryParams : TQueryParam[] = [];
-          filters.name?.forEach((item)=> {
-            queryParams.push({ name: 'name', value: item })
-          });
-
-          filters.year?.forEach((item)=> {
-            queryParams.push({ name: 'year', value: item })
+          filters.academicFaculty?.forEach((item)=> {
+            queryParams.push({ name: 'academicFaculty', value: item })
           });
 
           setParams(queryParams);
