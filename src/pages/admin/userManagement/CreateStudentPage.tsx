@@ -11,6 +11,7 @@ import { useCreateStudentMutation } from "../../../redux/features/admin/userMana
 import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createStudentSchema } from "../../../schemas/student.schema";
+import capitalizeWord from "../../../utils/capitalizeWord";
 
 const studentDummyData = {
   password: "",
@@ -56,7 +57,7 @@ const studentDefaultValues = {
       middleName: "Ahmed",
       lastName: "Nayok",
     },
-    // email: "gon6@gmail.com",
+    //email: "gon690@gmail.com",
     gender: "male",
     // //dateOfBirth: "2000-01-01",
     bloodGroup: "A+",
@@ -66,14 +67,14 @@ const studentDefaultValues = {
     presentAddress: "Gopalganj, Dhaka",
     permanentAddress: "Saidpur, Nilphamari",
 
-    guardian: {
-      fatherName: "James Doe",
-      fatherOccupation: "Engineer",
-      fatherContactNo: "111-222-3333",
-      motherName: "Jane Doe",
-      motherOccupation: "Doctortttr",
-      motherContactNo: "444-555-6666",
-    },
+    // guardian: {
+    //   fatherName: "James Doe",
+    //   fatherOccupation: "Engineer",
+    //   fatherContactNo: "111-222-3333",
+    //   motherName: "Jane Doe",
+    //   motherOccupation: "Doctortttr",
+    //   motherContactNo: "444-555-6666",
+    // },
     localGuardian: {
       name: "Uncle Bob",
       occupation: "Teacher",
@@ -103,32 +104,31 @@ const CreateStudentPage = () => {
 
 
 
-
   //handle student
   const onSubmit : SubmitHandler<FieldValues> = async ( data ) => {
     console.log(data);
-    const payload = {
-      password: "student123",
-      studentData: data
-    }
-    const formData = new FormData();
-    formData.append('data', JSON.stringify(payload));
-    formData.append('image', data?.image)
+  //   const payload = {
+  //     password: "student123",
+  //     studentData: data
+  //   }
+  //   const formData = new FormData();
+  //   formData.append('data', JSON.stringify(payload));
+  //   formData.append('image', data?.image)
 
-   const toastId = LoadingToast('Creating...')
-    try{
-      await createStudent(formData).unwrap();
-      SuccessToast('Student Create Success', toastId);
+  //  const toastId = LoadingToast('Creating...')
+  //   try{
+  //     await createStudent(formData).unwrap();
+  //     SuccessToast('Student Create Success', toastId);
 
-    }catch(err:any){
-      console.log(err);
-      if(err?.status === 409){
-        ErrorToast('This Email is already existed', toastId)
-      }
-      else{
-        ErrorToast('Something Went Wrong', toastId)
-      }
-    }
+  //   }catch(err:any){
+  //     console.log(err);
+  //     if(err?.status === 409){
+  //       ErrorToast('This Email is already existed', toastId)
+  //     }
+  //     else{
+  //       ErrorToast('Something Went Wrong', toastId)
+  //     }
+  //   }
     //console.log(Object.fromEntries(formData));
   }
 
@@ -190,7 +190,7 @@ const CreateStudentPage = () => {
             <Divider>Contact Information</Divider>
             <Row gutter={8}>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
-                <PHInput type="email" name="email" label="Email" />
+                <PHInput type="text" name="email" label="Email" />
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <PHInput type="text" name="contactNo" label="Contact No." />

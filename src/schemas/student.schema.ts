@@ -1,15 +1,22 @@
 import { z } from "zod";
+const MobileRegx = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
 
 // Custom validation function for capitalized format
 const capitalizeValidator = (value: string) => {
-  const formattedValue =
-    value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  const formattedValue = value
+    .split(" ") // Split the string into an array of words
+    .map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() // Capitalize first letter and make the rest lowercase
+    )
+    .join(" ");
   if (value !== formattedValue) {
     //throw new Error(`${value} must be in capitalize format`);
     return false;
   }
   return true;
 };
+
+
 
 
 //refine custom validation error is occred when-- refine callback function will return false
@@ -26,7 +33,7 @@ const createUserNameValidationSchema = z.object({
       message: "First Name must be in capitalize format",
     })
     .refine((value) => /^[A-Za-z]+$/.test(value), {
-      message: "First Name must only contain alphabets",
+      message: "First Name must only contain alphabets", //There is no space between two words
     }).refine(value => value.length <= 10, {
       message: "Fisrt Name maximum 10 characters.",
     }),
@@ -63,12 +70,72 @@ const createUserNameValidationSchema = z.object({
 
 // Zod schema for TGuardian
 const createGuardianValidationSchema = z.object({
-  fatherName: z.string().trim(),
-  fatherOccupation: z.string().trim(),
-  fatherContactNo: z.string().trim(),
-  motherName: z.string().trim(),
-  motherOccupation: z.string().trim(),
-  motherContactNo: z.string().trim(),
+  fatherName: z
+    .string({
+      required_error: "Father Name is required",
+    })
+    .min(1, { message: "Father Name is required" })
+    .trim()
+    .refine(capitalizeValidator, {
+      message: "Father Name must be in capitalize format",
+    })
+    .refine((value) => /^[A-Za-z\s]+$/.test(value), {
+      message: "Father Name must only contain alphabets", //"Name must only contain letters and spaces"
+    })
+    .refine((value) => value.length <= 40, {
+      message: "Fisrt Name maximum 40 characters.",
+    }),
+  fatherOccupation: z
+    .string({
+      required_error: "Father Occupation is required",
+    })
+    .min(1, { message: "Father Occupation is required" })
+    .trim()
+    .refine((value) => value.length <= 40, {
+      message: "Fisrt Occupation maximum 40 characters.",
+    }),
+  fatherContactNo: z
+    .string({
+      required_error: "Father Contact No is required",
+    })
+    .min(1, { message: "Father Contact No is required" })
+    .trim()
+    .refine((value) => MobileRegx.test(value), {
+      message: "Invalid Mobile Number",
+    }),
+  motherName: z
+    .string({
+      required_error: "Mother Name is required",
+    })
+    .min(1, { message: "Mother Name is required" })
+    .trim()
+    .refine(capitalizeValidator, {
+      message: "Mother Name must be in capitalize format",
+    })
+    .refine((value) => /^[A-Za-z]+$/.test(value), {
+      message: "Mother Name must only contain alphabets",
+    })
+    .refine((value) => value.length <= 40, {
+      message: "Mother Name maximum 40 characters.",
+    }),
+  motherOccupation: z
+    .string({
+      required_error: "Mother Occupation is required",
+    })
+    .min(1, { message: "Mother Occupation is required" })
+    .trim()
+    .refine((value) => value.length <= 40, {
+      message: "Mother Occupation maximum 40 characters.",
+    }),
+  motherContactNo: z
+    .string({
+      required_error: "Mother Contact No is required",
+    })
+    .min(1, { message: "Mother Contact No is required" })
+    .trim()
+    .refine((value) => MobileRegx.test(value), {
+      message: "Invalid Mobile Number",
+    }),
 });
 
 const createLocalGuardianValidationSchema = z.object({
@@ -82,7 +149,9 @@ const createLocalGuardianValidationSchema = z.object({
 export const createStudentSchema = z.object({
     name: createUserNameValidationSchema,
     email: z
-      .string()
+      .string({
+        required_error: "Email is required"
+      })
       .trim()
       .email({ message: "Invalid email address" }),
     gender: z.string({
