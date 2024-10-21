@@ -9,6 +9,8 @@ import PHDatePicker from "../../../components/form/PHDatePicker";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
 import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement/userManagementApi";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createStudentSchema } from "../../../schemas/userManagement.schema";
 
 const studentDummyData = {
   password: "",
@@ -49,35 +51,35 @@ const studentDummyData = {
 
 
 const studentDefaultValues = {
-    name: {
-      firstName: "Evan",
-      middleName: "Ahmed",
-      lastName: "Nayok",
-    },
-    email: "gon6@gmail.com",
-    gender: "male",
-    //dateOfBirth: "2000-01-01",
-    bloodGroup: "A+",
+    // name: {
+    //   firstName: "Evan",
+    //   middleName: "Ahmed",
+    //   lastName: "Nayok",
+    // },
+    // email: "gon6@gmail.com",
+    // gender: "male",
+    // //dateOfBirth: "2000-01-01",
+    // bloodGroup: "A+",
 
-    contactNo: "123-456-7890",
-    emergencyContactNo: "098-765-4321",
-    presentAddress: "Gopalganj, Dhaka",
-    permanentAddress: "Saidpur, Nilphamari",
+    // contactNo: "123-456-7890",
+    // emergencyContactNo: "098-765-4321",
+    // presentAddress: "Gopalganj, Dhaka",
+    // permanentAddress: "Saidpur, Nilphamari",
 
-    guardian: {
-      fatherName: "James Doe",
-      fatherOccupation: "Engineer",
-      fatherContactNo: "111-222-3333",
-      motherName: "Jane Doe",
-      motherOccupation: "Doctortttr",
-      motherContactNo: "444-555-6666",
-    },
-    localGuardian: {
-      name: "Uncle Bob",
-      occupation: "Teacher",
-      contactNo: "777-888-9999",
-      address: "9101 Pine Street, Springfield, IL",
-    },
+    // guardian: {
+    //   fatherName: "James Doe",
+    //   fatherOccupation: "Engineer",
+    //   fatherContactNo: "111-222-3333",
+    //   motherName: "Jane Doe",
+    //   motherOccupation: "Doctortttr",
+    //   motherContactNo: "444-555-6666",
+    // },
+    // localGuardian: {
+    //   name: "Uncle Bob",
+    //   occupation: "Teacher",
+    //   contactNo: "777-888-9999",
+    //   address: "9101 Pine Street, Springfield, IL",
+    // },
     //admissionSemester: "66f672b05661c240a320c439",
     //academicDepartment: "66f64ec6a85e6a248170887e",
  
@@ -121,7 +123,7 @@ const CreateStudentPage = () => {
       if(err?.status === 409){
         ErrorToast('This Email is already existed', toastId)
       }
-      if(err?.status === 500){
+      else{
         ErrorToast('TSomething Went Wrong', toastId)
       }
     }
@@ -134,7 +136,7 @@ const CreateStudentPage = () => {
     <>
       <Row>
         <Col span={24}>
-          <PHForm onSubmit={onSubmit} defaultValues={studentDefaultValues}>
+          <PHForm onSubmit={onSubmit} defaultValues={studentDefaultValues} resolver={zodResolver(createStudentSchema)}>
             <Divider>Personal Information</Divider>
             <Row gutter={8}>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>

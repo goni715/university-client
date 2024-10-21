@@ -39,6 +39,8 @@ const PHForm = ({onSubmit, children, defaultValues, resolver } : TFormProps) => 
      }
     }
 
+    console.log(methods.formState?.errors);
+
 
     
     return (
