@@ -56,7 +56,7 @@ const studentDefaultValues = {
       middleName: "Ahmed",
       lastName: "Nayok",
     },
-    //email: "gon690@gmail.com",
+    email: "jaman1@gmail.com",
     gender: "male",
     // //dateOfBirth: "2000-01-01",
     bloodGroup: "A+",

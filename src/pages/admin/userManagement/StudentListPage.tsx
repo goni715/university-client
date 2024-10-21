@@ -1,4 +1,4 @@
-import { Button, Table, TableColumnsType, TableProps } from "antd";
+import { Button, Space, Table, TableColumnsType, TableProps } from "antd";
 import { useState } from "react";
 import { TQueryParam } from "../../../types";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/student/studentApi";
@@ -10,27 +10,34 @@ interface DataType {
   endMonth: string;
 }
 
-type TDepartmentData = {
+type TStudentData = {
   _id: string;
-  name: string;
+  id: string;
+  fullName: string;
   academicFaculty: Record<string, unknown>;
 };
 
 const StudentListPage = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
-  
+  const [page, setPage] = useState(1);
+
   const {
     data: studentData,
-    isLoading,
     isFetching,
-  } = useGetAllStudentsQuery(undefined);
+  } = useGetAllStudentsQuery([
+    { name: "limit", value:10 },
+    { name: "page", value: page },
+    { name: "sort", value: "id" },
+    ...params
+  ]);
 
   const tableData = studentData?.data?.map(
-    ({ _id, fullName, academicFaculty }: TDepartmentData) => ({
-      id: _id,
+    ({ _id, id, fullName, email }: TStudentData) => ({
+      _id: _id,
       key: _id,
       name:fullName,
-      academicFacultyName: academicFaculty?.name,
+      id,
+      email
     })
   );
 
@@ -43,9 +50,14 @@ const StudentListPage = () => {
       dataIndex: "name",
     },
     {
-      title: "Academic Faculty",
-      key: "academicFaculty",
-      dataIndex: "academicFacultyName",
+      title: "ID",
+      key: "id",
+      dataIndex: "id",
+    },
+    {
+      title: "Email",
+      key: "email",
+      dataIndex: "email",
     },
     {
       title: "Action",
@@ -53,11 +65,14 @@ const StudentListPage = () => {
       dataIndex: "action",
       render: () => (
         <>
-          <div>
+          <Space>
+            <Button>Details</Button>
             <Button>Update</Button>
-          </div>
+            <Button>Block</Button>
+          </Space>
         </>
       ),
+      width: '1%'
     },
   ];
 
