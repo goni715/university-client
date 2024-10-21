@@ -21,7 +21,7 @@ const PHSelect = ({name, label, options, disabled } : TPHSelectProps) => {
             name={name}
             render={({ field }) => (
               <Form.Item label={label}>
-                <Select {...field} options={options} disabled={disabled} size="large" placeholder="Select"/>
+                <Select {...field} options={options} disabled={disabled} size="large" placeholder="Select" status={`${(errors && errors[name]?.message) ? 'error' : ''}`} />
                 {errors[name] && (
                   <span style={{ color: "red"}}>
                     {errors[name]?.message as string}

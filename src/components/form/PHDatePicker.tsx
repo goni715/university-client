@@ -15,9 +15,9 @@ const PHDatePicker = ({name, label} : TDatePickerProps) => {
         <div style={{ marginBottom: "20px" }}>
           <Controller
             name={name}
-            render={({ field, fieldState: { error } }) => (
+            render={({ field:{onChange}, fieldState: { error } }) => (
               <Form.Item label={label}>
-                <DatePicker {...field} id={name} size="large" style={{width: '100%'}}/>
+                <DatePicker onChange={(_date,dateString)=>onChange(dateString)} id={name} size="large" style={{width: '100%'}} status={`${(error && error.message) ? 'error' : ''}`}/>
                 {error && (
                   <span style={{ color: "red" }}>
                     {error.message as string}

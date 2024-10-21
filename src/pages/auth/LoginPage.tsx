@@ -18,7 +18,7 @@ import PHForm from "../../components/form/PHForm";
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [login] = useLoginMutation();
+  const [login, {isLoading}] = useLoginMutation();
 
   const defaultValues = {
     id: "A-0001",
@@ -56,7 +56,7 @@ const LoginPage = () => {
           >
             <PHInput type="text" name="id" label="ID" />
             <PHInput type="password" name="password" label="Password" />
-            <Button htmlType="submit">Login</Button>
+            <Button htmlType="submit" disabled={isLoading}>Login</Button>
           </PHForm>
         </Col>
       </Flex>

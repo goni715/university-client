@@ -10,7 +10,7 @@ import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicM
 import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement/userManagementApi";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createStudentSchema } from "../../../schemas/userManagement.schema";
+import { createStudentSchema } from "../../../schemas/student.schema";
 
 const studentDummyData = {
   password: "",
@@ -51,35 +51,35 @@ const studentDummyData = {
 
 
 const studentDefaultValues = {
-    // name: {
-    //   firstName: "Evan",
-    //   middleName: "Ahmed",
-    //   lastName: "Nayok",
-    // },
+    name: {
+      firstName: "Evan",
+      middleName: "Ahmed",
+      lastName: "Nayok",
+    },
     // email: "gon6@gmail.com",
-    // gender: "male",
+    gender: "male",
     // //dateOfBirth: "2000-01-01",
-    // bloodGroup: "A+",
+    bloodGroup: "A+",
 
-    // contactNo: "123-456-7890",
-    // emergencyContactNo: "098-765-4321",
-    // presentAddress: "Gopalganj, Dhaka",
-    // permanentAddress: "Saidpur, Nilphamari",
+    contactNo: "123-456-7890",
+    emergencyContactNo: "098-765-4321",
+    presentAddress: "Gopalganj, Dhaka",
+    permanentAddress: "Saidpur, Nilphamari",
 
-    // guardian: {
-    //   fatherName: "James Doe",
-    //   fatherOccupation: "Engineer",
-    //   fatherContactNo: "111-222-3333",
-    //   motherName: "Jane Doe",
-    //   motherOccupation: "Doctortttr",
-    //   motherContactNo: "444-555-6666",
-    // },
-    // localGuardian: {
-    //   name: "Uncle Bob",
-    //   occupation: "Teacher",
-    //   contactNo: "777-888-9999",
-    //   address: "9101 Pine Street, Springfield, IL",
-    // },
+    guardian: {
+      fatherName: "James Doe",
+      fatherOccupation: "Engineer",
+      fatherContactNo: "111-222-3333",
+      motherName: "Jane Doe",
+      motherOccupation: "Doctortttr",
+      motherContactNo: "444-555-6666",
+    },
+    localGuardian: {
+      name: "Uncle Bob",
+      occupation: "Teacher",
+      contactNo: "777-888-9999",
+      address: "9101 Pine Street, Springfield, IL",
+    },
     //admissionSemester: "66f672b05661c240a320c439",
     //academicDepartment: "66f64ec6a85e6a248170887e",
  
@@ -106,6 +106,7 @@ const CreateStudentPage = () => {
 
   //handle student
   const onSubmit : SubmitHandler<FieldValues> = async ( data ) => {
+    console.log(data);
     const payload = {
       password: "student123",
       studentData: data
@@ -120,11 +121,12 @@ const CreateStudentPage = () => {
       SuccessToast('Student Create Success', toastId);
 
     }catch(err:any){
+      console.log(err);
       if(err?.status === 409){
         ErrorToast('This Email is already existed', toastId)
       }
       else{
-        ErrorToast('TSomething Went Wrong', toastId)
+        ErrorToast('Something Went Wrong', toastId)
       }
     }
     //console.log(Object.fromEntries(formData));
@@ -146,7 +148,7 @@ const CreateStudentPage = () => {
                 <PHInput
                   type="text"
                   name="name.middleName"
-                  label="Middle Name"
+                  label="Middle Name (Optional)"
                 />
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
@@ -173,18 +175,13 @@ const CreateStudentPage = () => {
                 <Controller
                   name="image"
                   render={({ field: {onChange, value, ...field} }) => (
-                    <Form.Item label="Picture">
+                    <Form.Item label="Picture (Optional)">
                       <Input
                         {...field}
                         value={value?.fileName}
                         type="file"
                         onChange={(e) => onChange(e.target.files?.[0])}
                       />
-                      {/* {errors[name] && (
-                        <span style={{ color: "red" }}>
-                          {errors[name]?.message as string}
-                        </span> */}
-                      {/* )} */}
                     </Form.Item>
                   )}
                 />
