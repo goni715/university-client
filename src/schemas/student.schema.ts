@@ -112,8 +112,8 @@ const createGuardianValidationSchema = z.object({
     .refine(capitalizeValidator, {
       message: "Mother Name must be in capitalize format",
     })
-    .refine((value) => /^[A-Za-z]+$/.test(value), {
-      message: "Mother Name must only contain alphabets",
+    .refine((value) => /^[A-Za-z\s]+$/.test(value), {
+      message: "Father Name must only contain alphabets", //"Name must only contain letters and spaces"
     })
     .refine((value) => value.length <= 40, {
       message: "Mother Name maximum 40 characters.",
@@ -140,9 +140,33 @@ const createGuardianValidationSchema = z.object({
 
 const createLocalGuardianValidationSchema = z.object({
   name: z.string().trim(),
-  occupation: z.string().trim(),
-  contactNo: z.string().trim(),
-  address: z.string().trim(),
+  occupation: z
+    .string({
+      required_error: "Occupation is required",
+    })
+    .min(1, { message: " Occupation is required" })
+    .trim()
+    .refine((value) => value.length <= 40, {
+      message: "Mother Occupation maximum 40 characters.",
+    }),
+  contactNo: z
+    .string({
+      required_error: "Contact No is required",
+    })
+    .min(1, { message: "Contact No is required" })
+    .trim()
+    .refine((value) => MobileRegx.test(value), {
+      message: "Invalid Mobile Number",
+    }),
+  address: z
+    .string({
+      required_error: "Address is required",
+    })
+    .min(1, { message: "Address is required" })
+    .trim()
+    .refine((value) => value.length <= 60, {
+      message: "Address maximum 60 characters.",
+    }),
 });
 
 // Zod schema for TStudent
@@ -156,17 +180,56 @@ export const createStudentSchema = z.object({
       .email({ message: "Invalid email address" }),
     gender: z.string({
       required_error: "Please Select a Gender"
-    }).min(1, '"Please Select a Gender"'),
+    }).min(1, "Please Select a Gender"),
     dateOfBirth: z.string({
       required_error: "Birthday is required"
     }).min(1, "Birthday is required"),
-    contactNo: z.string().trim(), //.nonempty('Contact Number is required'),
-    emergencyContactNo: z.string().trim(), //.nonempty('Emergency Contact Number is required'),
-    bloodGroup: z.string(),
-    presentAddress: z.string().trim(), //.nonempty('Present Address is required'),
-    permanentAddress: z.string().trim(), //.nonempty('Permanent Address is required'),
+    contactNo: z
+    .string({
+      required_error: "Contact No is required",
+    })
+    .min(1, { message: "Contact No is required" })
+    .trim()
+    .refine((value) => MobileRegx.test(value), {
+      message: "Invalid Mobile Number",
+    }),
+    emergencyContactNo: z
+    .string({
+      required_error: "Emergency Contact No is required",
+    })
+    .min(1, { message: "Emergency Contact No is required" })
+    .trim()
+    .refine((value) => MobileRegx.test(value), {
+      message: "Invalid Mobile Number",
+    }), 
+    bloodGroup:  z.string({
+      required_error: "Please Select a Blood Group"
+    }).min(1, "Please Select a Blood Group"),
+    presentAddress: z
+    .string({
+      required_error: "Present Address is required",
+    })
+    .min(1, { message: "Present Address is required" })
+    .trim()
+    .refine((value) => value.length <= 60, {
+      message: "Address maximum 60 characters.",
+    }),
+    permanentAddress: z
+    .string({
+      required_error: "Permanent Address is required",
+    })
+    .min(1, { message: "Permanent Address is required" })
+    .trim()
+    .refine((value) => value.length <= 60, {
+      message: "Address maximum 60 characters.",
+    }), 
     guardian: createGuardianValidationSchema,
     localGuardian: createLocalGuardianValidationSchema,
-    admissionSemester: z.string(),
-    academicDepartment: z.string(),
+    admissionSemester: z.string({
+      required_error: "Select a Admission Semester"
+    }).min(1, "Select a Admission Semester"),
+    academicDepartment:z.string({
+      required_error: "Select a Academic Department"
+    }).min(1, "Select a Academic Department"),
+    image: z.any()
 });
