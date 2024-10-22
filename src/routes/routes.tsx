@@ -6,7 +6,6 @@ import routesGenerator from "../utils/routesGenerator";
 import { adminPaths } from "./adminRoutes";
 import { facultyPaths } from "./facultyRoutes";
 import { studentPaths } from "./studentRoutes";
-import StudentUpdatePage from "../pages/admin/userManagement/StudentUpdatePage";
 
 const router = createBrowserRouter([
   {
@@ -16,13 +15,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <App />,
-    children: [
-      {
-        path: "update-student/:id",
-        element: <StudentUpdatePage />,
-      },
-      ...routesGenerator(adminPaths),
-    ],
+    children: routesGenerator(adminPaths)
   },
   {
     path: "/faculty",

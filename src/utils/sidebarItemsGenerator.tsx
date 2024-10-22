@@ -12,12 +12,16 @@ const sidebarItemsGenerator = (items: TUserPath[], role: string) => {
 
     if (item?.children) {
       acc.push({
-        key: item.label,
+        key: item.label!,
         label: item.label,
-        children: item.children.map((child) => ({
-          key: `/${role}/${child.path}`,
-          label: <NavLink to={`/${role}/${child.path}`}>{child.label}</NavLink>,
-        })),
+        children: item.children.map((child) =>{
+          if(child.label !== "NotSidebarItem"){
+            return {
+              key: `/${role}/${child.path}`,
+              label: <NavLink to={`/${role}/${child.path}`}>{child.label}</NavLink>,
+            }
+          }
+        }),
       });
     }
 

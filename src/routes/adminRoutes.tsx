@@ -9,6 +9,7 @@ import CreateAdminPage from "../pages/admin/userManagement/CreateAdminPage";
 import CreateFacultyPage from "../pages/admin/userManagement/CreateFacultyPage";
 import CreateStudentPage from "../pages/admin/userManagement/CreateStudentPage";
 import StudentListPage from "../pages/admin/userManagement/StudentListPage";
+import StudentUpdatePage from "../pages/admin/userManagement/StudentUpdatePage";
 
 export const adminPaths = [
   {
@@ -58,6 +59,11 @@ export const adminPaths = [
         label: "Create Student",
         path: "create-student",
         element: <CreateStudentPage />,
+      },
+      {
+        label: 'NotSidebarItem',
+        path: "update-student/:id",
+        element: <StudentUpdatePage />,
       },
       {
         label: "Students",
