@@ -11,11 +11,13 @@ const userManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["Students"],
     }),
     changeStatus: builder.mutation({
-      query: ({data, id}) => ({
-        url: `/user/change-student/${id}`,
-        method: "PATCH",
-        body: data,
-      }),
+      query: ({data, id}) =>{
+        return {
+          url: `/user/change-status/${id}`,
+          method: "PATCH",
+          body: data,
+        }
+      },
       invalidatesTags: ["Students"],
     }),
   }),

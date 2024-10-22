@@ -6,14 +6,25 @@ import { useNavigate } from "react-router-dom";
 import BlockModal from "../../../components/modal/BlockModal";
 import { useAppDispatch } from "../../../redux/hook/hook";
 import { SetBlockModalOpen } from "../../../redux/features/modal/modalSlice";
+import { SetStatus, SetUserId } from "../../../redux/features/admin/userManagement/userSlice";
 
+type TTableData = {
+  _id: string;
+  id: string;
+  fullName: string;
+  email:string;
+  contactNo: string,
+  status: string,
+  userId: string;
+};
 
 type TStudentData = {
   _id: string;
   id: string;
   fullName: string;
   email:string;
-  contactNo: string
+  contactNo: string,
+  user: Record<string, unknown>,
 };
 
 const StudentListPage = () => {
@@ -39,19 +50,21 @@ const StudentListPage = () => {
 
 
   const tableData = studentData?.data?.map(
-    ({ _id, id, fullName, email, contactNo }: TStudentData) => ({
+    ({ _id, id, fullName, email, contactNo, user }: TStudentData) => ({
       _id: _id,
       key: _id,
       name:fullName,
       id,
       email,
-      contactNo
+      contactNo,
+      status: user?.status,
+      userId: user?._id
     })
   );
 
 
 
-  const columns: TableColumnsType<TStudentData> = [
+  const columns: TableColumnsType<TTableData> = [
     {
       title: "Name",
       key: "name",
@@ -76,13 +89,21 @@ const StudentListPage = () => {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      render: (_param, {_id}) =>{
+      render: (_param, {_id, status, userId}) =>{
         return (
           <>
           <Space>
             <Button>Details</Button>
             <Button onClick={()=>navigate(`/admin/update-student/${_id}`)}>Update</Button>
-            <Button onClick={()=> dispatch(SetBlockModalOpen(true))}>Block</Button>
+            <Button 
+               onClick={()=>{
+                dispatch(SetUserId(userId))
+                dispatch(SetStatus(status))
+                dispatch(SetBlockModalOpen(true))}
+               } 
+            >
+              { status === "in-progress" ? "Block" : "Unblock" }
+            </Button>
           </Space>
         </>
       )},
