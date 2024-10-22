@@ -1,9 +1,9 @@
 import { Button, Dropdown, Table, TableColumnsType, TableProps, Tag } from "antd";
 import { useState } from "react";
 import { TQueryParam } from "../../../types";
-import { useGetAllSemesterRegistrationsQuery } from "../../../redux/features/admin/courseManagement/semesterRegistration/semesterRegistrationApi";
+import { useGetAllSemesterRegistrationsQuery, useUpdateSemesterRegistrationMutation } from "../../../redux/features/admin/courseManagement/semesterRegistration/semesterRegistrationApi";
 import moment from "moment";
-import { SuccessToast } from "../../../helper/ValidationHelper";
+import { ErrorToast, SuccessToast } from "../../../helper/ValidationHelper";
 
 
 interface TTableDataType {
@@ -27,10 +27,12 @@ interface TSemesterData {
 
 const SemesterRegistrationPage = () => {
     const { data: semesterData, isLoading, isFetching } = useGetAllSemesterRegistrationsQuery(undefined);
+    const [ updateSemesterRegistration ] = useUpdateSemesterRegistrationMutation();
+    const [ semesterId, setSemesterId ] = useState('')
 
 
     const tableData = semesterData?.data?.map(({ _id, academicSemester, status, startDate, endDate} : TSemesterData)=> ({
-        id: _id,
+        _id,
         key:_id,
         name: `${academicSemester?.name} ${academicSemester?.year}`,
         status,
@@ -56,9 +58,29 @@ const SemesterRegistrationPage = () => {
       },
     ];
 
-// update status
-const handleClick = ({ key }:{key:string}) => {
-  SuccessToast(`Click on item ${key}`);
+// update status) 
+const handleClick = async ({key}: {key:string}) => {
+  
+ 
+  try{
+    await updateSemesterRegistration({
+      id: semesterId,
+      data: {
+        status:key
+      }
+    }).unwrap();
+    SuccessToast(`Update Success`);
+  }
+  
+  catch(err:any){
+    console.log(err);
+    if(err?.status === 400){
+      ErrorToast(err?.data?.message);
+    }
+    else{
+      ErrorToast('Something Went Wrong');
+    }
+  }
 };
 
 
@@ -102,17 +124,17 @@ const handleClick = ({ key }:{key:string}) => {
           title: "Action",
           key: "action",
           dataIndex: "action",
-          render: (_param, {status}) => (
+          render: (_param, {status, _id}) => (
             <>
               <Dropdown
                 menu={{
                   items,
                   selectable: true,
                   defaultSelectedKeys: [status],
-                  onClick:handleClick
+                  onClick: handleClick,
                 }}
               >
-                <Button>Change Status</Button>
+                <Button onClick={()=>setSemesterId(_id)}>Change Status</Button>
               </Dropdown>
             </>
           ),

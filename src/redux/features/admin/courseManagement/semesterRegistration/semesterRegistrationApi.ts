@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TQueryParam } from "../../../../../types";
 import { baseApi } from "../../../api/baseApi";
 
@@ -19,7 +20,7 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
           params: params,
         };
       },
-      providesTags: ["AcademicDepartment"],
+      providesTags: ["SemesterRegistration"],
     }),
     createSemesterRegistration: builder.mutation({
       query: (data) => ({
@@ -27,9 +28,28 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: (result:any, _error, _arg) =>{
+        if(result?.success){
+          return ['SemesterRegistration']
+        }
+        return []
+      } 
+    }),
+    updateSemesterRegistration: builder.mutation({
+      query: ({data, id}) => ({
+        url: `/semester-registration/update-semester-registration/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result:any, _error, _arg) =>{
+        if(result?.success){
+          return ['SemesterRegistration']
+        }
+        return []
+      } 
     }),
   }),
 });
 
-export const { useGetAllSemesterRegistrationsQuery, useCreateSemesterRegistrationMutation } =
+export const { useGetAllSemesterRegistrationsQuery, useCreateSemesterRegistrationMutation, useUpdateSemesterRegistrationMutation } =
 semesterRegistrationApi;
