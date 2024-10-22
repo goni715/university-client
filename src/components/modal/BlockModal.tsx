@@ -1,33 +1,25 @@
 import { Button, Modal } from "antd";
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hook/hook";
+import { SetBlockModalOpen } from "../../redux/features/modal/modalSlice";
 
 const BlockModal = () => {
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const showModal = () => {
-    setOpen(true);
-  };
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
-  };
+    const {blockModalOpen} = useAppSelector((state)=>state.modal);
+    const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(false);
+
+   
   const handleCancel = () => {
-    setOpen(false);
-  };
+    dispatch(SetBlockModalOpen(false));
+};
+
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal with customized footer
-      </Button>
       <Modal
-        open={open}
+        open={blockModalOpen}
         title="Are you sure"
-        onOk={handleOk}
-        onCancel={handleCancel}
+        closable={false}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Cancel
@@ -36,7 +28,7 @@ const BlockModal = () => {
             key="submit"
             type="primary"
             loading={loading}
-            onClick={handleOk}
+            // onClick={handleOk}
           >
             Confirm
           </Button>

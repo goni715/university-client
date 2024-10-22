@@ -4,6 +4,8 @@ import { TQueryParam } from "../../../types";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/student/studentApi";
 import { useNavigate } from "react-router-dom";
 import BlockModal from "../../../components/modal/BlockModal";
+import { useAppDispatch } from "../../../redux/hook/hook";
+import { SetBlockModalOpen } from "../../../redux/features/modal/modalSlice";
 
 
 type TStudentData = {
@@ -18,6 +20,7 @@ const StudentListPage = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const {
     data: studentData,
@@ -79,7 +82,7 @@ const StudentListPage = () => {
           <Space>
             <Button>Details</Button>
             <Button onClick={()=>navigate(`/admin/update-student/${_id}`)}>Update</Button>
-            <Button>Block</Button>
+            <Button onClick={()=> dispatch(SetBlockModalOpen(true))}>Block</Button>
           </Space>
         </>
       )},

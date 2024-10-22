@@ -3,6 +3,8 @@ import authSliceReducer from '../features/auth/authSlice'
 import { baseApi } from '../features/api/baseApi'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import modalSliceReducer from '../features/modal/modalSlice';
+import userSliceReducer from '../features/admin/userManagement/userSlice';
  
 
 const persistConfig = {
@@ -17,7 +19,9 @@ const persistedAuthReducer = persistReducer(persistConfig, authSliceReducer);
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath] : baseApi.reducer,
-    auth: persistedAuthReducer
+    auth: persistedAuthReducer,
+    modal: modalSliceReducer,
+    user: userSliceReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

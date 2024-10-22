@@ -10,8 +10,16 @@ const userManagementApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Students"],
     }),
+    changeStatus: builder.mutation({
+      query: ({data, id}) => ({
+        url: `/user/change-student/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Students"],
+    }),
   }),
 });
 
-export const { useCreateStudentMutation } =
+export const { useCreateStudentMutation, useChangeStatusMutation } =
 userManagementApi;
