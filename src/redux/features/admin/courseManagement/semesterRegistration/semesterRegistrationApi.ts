@@ -4,7 +4,7 @@ import { baseApi } from "../../../api/baseApi";
 
 const semesterRegistrationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllDepartments: builder.query({
+    getAllSemesterRegistrations: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
         if (args !==undefined && args.length > 0) {
@@ -14,7 +14,7 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
         }
 
         return {
-          url: "/academic-department/get-all-departments",
+          url: "/semester-registration/get-all-semester-registrations",
           method: "GET",
           params: params,
         };
@@ -31,5 +31,5 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllDepartmentsQuery, useCreateSemesterRegistrationMutation } =
+export const { useGetAllSemesterRegistrationsQuery, useCreateSemesterRegistrationMutation } =
 semesterRegistrationApi;
