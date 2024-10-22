@@ -124,7 +124,6 @@ const CreateStudentPage = () => {
       }
       else{
         ErrorToast('Something Went Wrong', toastId)
-        console.log(err);
       }
     }
     

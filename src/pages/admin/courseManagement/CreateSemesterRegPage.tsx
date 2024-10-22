@@ -1,24 +1,18 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { Button, Col, Flex } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { semesterOptions, semesterStatusOptions } from "../../../constants/semester";
+import { semesterStatusOptions } from "../../../constants/semester";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
 import PHForm from "../../../components/form/PHForm";
-import { AcademicSemesterSchema } from "../../../schemas/academicManagement.schema";
 import PHSelect from "../../../components/form/PHSelect";
-import { monthOptions } from "../../../constants/global";
-import { useAddAcademicSemesterMutation, useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
 import PHDatePicker from "../../../components/form/PHDatePicker";
 import PHInput from "../../../components/form/PHInput";
 import { createSemesterRegistrationSchema } from "../../../schemas/semesterRegistration.schema";
+import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
+import { useCreateSemesterRegistrationMutation } from "../../../redux/features/admin/courseManagement/semesterRegistration/semesterRegistrationApi";
 
 
 
-const currentYear = new Date().getFullYear();
-const yearOptions = [0, 1, 2, 3, 4].map((item)=> ({
-  value: String(currentYear + item),
-  label: String(currentYear + item)
-}));
 
 
 
@@ -31,40 +25,34 @@ const CreateSemesterRegPage = () => {
       value: item?._id,
       label: `${item?.name} ${item?.year}`,
     }));
+
+
+    const [createSemesterRegistration] = useCreateSemesterRegistrationMutation();
     
 
 
 
-  const onSubmit : SubmitHandler<FieldValues> = (data) => {
+  const onSubmit : SubmitHandler<FieldValues> = async(data) => {
     const newSemesterData = {
       ...data,
       minCredit: Number(data.minCredit),
       maxCredit: Number(data.maxCredit)
     }
 
-    console.log(newSemesterData);
-//       const name = semesterOptions[Number(data?.name) -1 ]?.label;
-//       const semesterData = {
-//         name,
-//         code: data.name,
-//         year: data.year,
-//         startMonth: data.startMonth,
-//         endMonth: data.endMonth,
-//       }
+     const toastId = LoadingToast('Creating...') 
 
-    //  const toastId = LoadingToast('Processing...') 
-
-    // try {
-    //   await addAcademicSemester(semesterData).unwrap();
-    //   SuccessToast("Academic Semester Create Success", toastId);
-    //   return true;
-    // } catch (err: any) {
-    //   if (err?.status === 409) {
-    //     ErrorToast("This Semester is already existed", toastId);
-    //   } else {
-    //     ErrorToast("Something Went Wrong", toastId);
-    //   }
-    // }
+    try {
+      await createSemesterRegistration(newSemesterData).unwrap();
+      SuccessToast("Academic Semester Create Success", toastId);
+      return true;
+    } catch (err: any) {
+      if(err?.status === 400){
+        ErrorToast(err?.data?.message, toastId)
+      }
+      else{
+        ErrorToast("Something Went Wrong", toastId)
+      } 
+    }
   }
 
 
