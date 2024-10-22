@@ -1,7 +1,8 @@
-import { Button, Table, TableColumnsType, TableProps } from "antd";
+import { Button, Dropdown, Table, TableColumnsType, TableProps, Tag } from "antd";
 import { useState } from "react";
 import { TQueryParam } from "../../../types";
 import { useGetAllSemesterRegistrationsQuery } from "../../../redux/features/admin/courseManagement/semesterRegistration/semesterRegistrationApi";
+import moment from "moment";
 
 
 interface TTableDataType {
@@ -13,6 +14,7 @@ interface TTableDataType {
 
 
 interface TSemesterData {
+    _id: string;
     academicSemester: Record<string, unknown>;
     status: string;
     startMonth: string;
@@ -23,84 +25,94 @@ interface TSemesterData {
 
 
 const SemesterRegistrationPage = () => {
-    const [params, setParams] = useState<TQueryParam[]>([]);
-    const { data: semesterData, isLoading, isFetching } = useGetAllSemesterRegistrationsQuery(params);
+    const { data: semesterData, isLoading, isFetching } = useGetAllSemesterRegistrationsQuery(undefined);
 
-    console.log(semesterData);
 
     const tableData = semesterData?.data?.map(({ _id, academicSemester, status, startDate, endDate} : TSemesterData)=> ({
         id: _id,
         key:_id,
         name: `${academicSemester?.name} ${academicSemester?.year}`,
         status,
-        startDate,
-        endDate
+        startDate: moment(startDate).format('MMMM Do YYYY'),
+        endDate: moment(endDate).format('MMMM Do YYYY')
     }));
 
 
       
       const columns: TableColumnsType<TTableDataType> = [
         {
-          title: 'Name',
+          title: "Name",
           key: "name",
-          dataIndex: 'name'
+          dataIndex: "name",
         },
         {
-          title: 'Status',
+          title: "Status",
           key: "status",
-          dataIndex: 'status'
+          dataIndex: "status",
+          render: (_param, { status }) => {
+            return (
+              <Tag
+                color={`${
+                  (status === "UPCOMING" && "blue") ||
+                  (status === "ONGOING" && "green") ||
+                  (status === "ENDED" && "red")
+                }`}
+              >
+                {status}
+              </Tag>
+            );
+          },
         },
         {
-          title: 'Start Date',
+          title: "Start Date",
           key: "startDate",
-          dataIndex: 'startDate'
+          dataIndex: "startDate",
         },
         {
-            title: 'End Date',
-            key: "endDate",
-            dataIndex: 'endDate'
+          title: "End Date",
+          key: "endDate",
+          dataIndex: "endDate",
         },
         {
-            title: 'Action',
-            key: "action",
-            dataIndex: 'action',
-            render: () => (
-              <>
-              <div>
-                <Button>Update</Button>
-              </div>
-              </>
-            )
+          title: "Action",
+          key: "action",
+          dataIndex: "action",
+          render: (_param, {status}) => (
+            <>
+              <Dropdown
+                menu={{
+                  items,
+                  selectable: true,
+                  defaultSelectedKeys: [status],
+                }}
+              >
+                <Button>Change Status</Button>
+              </Dropdown>
+            </>
+          ),
         },
       ];
 
- 
-      const onChange : TableProps<DataType>['onChange'] = (_pagination, filters, _sorter, extra) => {
-        //console.log('params', pagination, filters, sorter, extra);
-        //console.log({filters, extra});
-        if(extra.action === 'filter'){
-          const queryParams : TQueryParam[] = [];
-          filters.name?.forEach((item)=> {
-            queryParams.push({ name: 'name', value: item })
-          });
 
-          filters.year?.forEach((item)=> {
-            queryParams.push({ name: 'year', value: item })
-          });
-
-          setParams(queryParams);
-        }
-      };
-
-
-      // if(isLoading){
-      //   return <p>Loading...</p>
-      // }
+      const items = [
+        {
+          key: 'UPCOMING',
+          label: 'Upcoming',
+        },
+        {
+          key: 'ONGOING',
+          label: 'Ongoing',
+        },
+        {
+          key: 'ENDED',
+          label: 'Ended',
+        },
+      ];
 
 
     return (
       <>
-        <Table loading={isFetching} columns={columns} dataSource={tableData} onChange={onChange} />
+        <Table loading={isFetching} columns={columns} dataSource={tableData} />
       </>
     );
 };
