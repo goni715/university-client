@@ -2,28 +2,26 @@ import { Button, Pagination, Space, Table, TableColumnsType, TableProps } from "
 import { useState } from "react";
 import { TQueryParam } from "../../../types";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/student/studentApi";
+import { useNavigate } from "react-router-dom";
 
-interface DataType {
-  name: string;
-  year: string;
-  startMonth: string;
-  endMonth: string;
-}
 
 type TStudentData = {
   _id: string;
   id: string;
   fullName: string;
   email:string;
+  contactNo: string
 };
 
 const StudentListPage = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   const {
     data: studentData,
     isFetching,
+    isLoading
   } = useGetAllStudentsQuery([
     { name: "limit", value:3} ,
     { name: "page", value: currentPage },
@@ -32,23 +30,24 @@ const StudentListPage = () => {
   ]);
 
   const total = studentData?.meta?.total;
-  //const pageLimit = studentData?.meta?.limit;
+  const pageLimit = studentData?.meta?.limit;
 
 
 
   const tableData = studentData?.data?.map(
-    ({ _id, id, fullName, email }: TStudentData) => ({
+    ({ _id, id, fullName, email, contactNo }: TStudentData) => ({
       _id: _id,
       key: _id,
       name:fullName,
       id,
-      email
+      email,
+      contactNo
     })
   );
 
 
 
-  const columns: TableColumnsType<DataType> = [
+  const columns: TableColumnsType<TStudentData> = [
     {
       title: "Name",
       key: "name",
@@ -65,23 +64,29 @@ const StudentListPage = () => {
       dataIndex: "email",
     },
     {
+      title: "Contact No",
+      key: "contact",
+      dataIndex: "contactNo",
+    },
+    {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      render: () => (
-        <>
+      render: (_param, {_id}) =>{
+        return (
+          <>
           <Space>
             <Button>Details</Button>
-            <Button>Update</Button>
+            <Button onClick={()=>navigate(`/admin/update-student/${_id}`)}>Update</Button>
             <Button>Block</Button>
           </Space>
         </>
-      ),
+      )},
       width: '1%'
     },
   ];
 
-  const onChange: TableProps<DataType>["onChange"] = (
+  const onChange: TableProps<TStudentData>["onChange"] = (
     _pagination,
     filters,
     _sorter,
@@ -115,7 +120,15 @@ const StudentListPage = () => {
         onChange={onChange}
       />
       <br />
-     <Pagination align="end" onChange={handlePagination} current={currentPage} defaultCurrent={1} defaultPageSize={3} total={total} />
+      {
+        isLoading ? (
+          <> ...</>
+        ): (
+          <>
+            <Pagination align="end" onChange={handlePagination} current={currentPage} defaultPageSize={pageLimit} total={total} />
+          </>
+        )
+      }
     </>
   );
 };
