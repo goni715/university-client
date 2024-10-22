@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TQueryParam } from "../../../types";
 import { useGetAllSemesterRegistrationsQuery } from "../../../redux/features/admin/courseManagement/semesterRegistration/semesterRegistrationApi";
 import moment from "moment";
+import { SuccessToast } from "../../../helper/ValidationHelper";
 
 
 interface TTableDataType {
@@ -36,6 +37,30 @@ const SemesterRegistrationPage = () => {
         startDate: moment(startDate).format('MMMM Do YYYY'),
         endDate: moment(endDate).format('MMMM Do YYYY')
     }));
+
+
+
+//status dropdown items
+    const items = [
+      {
+        key: 'UPCOMING',
+        label: 'Upcoming',
+      },
+      {
+        key: 'ONGOING',
+        label: 'Ongoing',
+      },
+      {
+        key: 'ENDED',
+        label: 'Ended',
+      },
+    ];
+
+// update status
+const handleClick = ({ key }:{key:string}) => {
+  SuccessToast(`Click on item ${key}`);
+};
+
 
 
       
@@ -84,6 +109,7 @@ const SemesterRegistrationPage = () => {
                   items,
                   selectable: true,
                   defaultSelectedKeys: [status],
+                  onClick:handleClick
                 }}
               >
                 <Button>Change Status</Button>
@@ -94,20 +120,7 @@ const SemesterRegistrationPage = () => {
       ];
 
 
-      const items = [
-        {
-          key: 'UPCOMING',
-          label: 'Upcoming',
-        },
-        {
-          key: 'ONGOING',
-          label: 'Ongoing',
-        },
-        {
-          key: 'ENDED',
-          label: 'Ended',
-        },
-      ];
+
 
 
     return (
