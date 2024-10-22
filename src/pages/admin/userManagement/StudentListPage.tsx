@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TQueryParam } from "../../../types";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/student/studentApi";
 import { useNavigate } from "react-router-dom";
+import BlockModal from "../../../components/modal/BlockModal";
 
 
 type TStudentData = {
@@ -129,6 +130,8 @@ const StudentListPage = () => {
           </>
         )
       }
+
+      <BlockModal/>
     </>
   );
 };
