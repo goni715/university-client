@@ -5,6 +5,8 @@ import CreateAcademicDepartmentPage from "../pages/admin/academicManagement/Crea
 import CreateAcademicFacultyPage from "../pages/admin/academicManagement/CreateAcademicFacultyPage";
 import CreateAcademicSemesterPage from "../pages/admin/academicManagement/CreateAcademicSemesterPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import CoursesPage from "../pages/admin/courseManagement/CoursesPage";
+import CreateCoursePage from "../pages/admin/courseManagement/CreateCoursePage";
 import CreateSemesterRegPage from "../pages/admin/courseManagement/CreateSemesterRegPage";
 import SemesterRegistrationPage from "../pages/admin/courseManagement/SemesterRegistrationPage";
 import CreateAdminPage from "../pages/admin/userManagement/CreateAdminPage";
@@ -96,6 +98,16 @@ export const adminPaths = [
         label: "Semseter Registration",
         path: "semster-registration",
         element: <SemesterRegistrationPage />,
+      },
+      {
+        label: "Create Course",
+        path: "create-course",
+        element: <CreateCoursePage />,
+      },
+      {
+        label: "Courses",
+        path: "courses",
+        element: <CoursesPage />,
       }
     ],
   },

@@ -73,7 +73,6 @@ const handleClick = async ({key}: {key:string}) => {
   }
   
   catch(err:any){
-    console.log(err);
     if(err?.status === 400){
       ErrorToast(err?.data?.message);
     }
