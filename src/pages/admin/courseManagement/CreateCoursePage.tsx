@@ -1,16 +1,12 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { Button, Col, Flex } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { semesterStatusOptions } from "../../../constants/semester";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
 import PHForm from "../../../components/form/PHForm";
 import PHInput from "../../../components/form/PHInput";
-import { createSemesterRegistrationSchema } from "../../../schemas/semesterRegistration.schema";
-import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement/academicSemester/academicSemesterApi";
-import { useCreateSemesterRegistrationMutation } from "../../../redux/features/admin/courseManagement/semesterRegistration/semesterRegistrationApi";
 import PHMultiSelect from "../../../components/form/PHMultiSelect";
-import { monthOptions } from "../../../constants/global";
 import { courseSchema } from "../../../schemas/course.schema";
+import { useCreateCourseMutation, useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement/course/courseApi";
 
 
 
@@ -19,16 +15,16 @@ import { courseSchema } from "../../../schemas/course.schema";
 
 
 const CreateCoursePage = () => {
-    const { data: semesterData, isLoading } = useGetAllSemestersQuery([
-        {name: "sort", value: 'year'}
+    const { data: coursesData, isLoading } = useGetAllCoursesQuery([
+        {name: "sort", value: 'code'}
     ]);
-    const academicSemesterOptions = semesterData?.data?.map((item) => ({
+    const preRequisiteCoursesOptions = coursesData?.data?.map((item: { _id: string; title: string; code: number; }) => ({
       value: item?._id,
-      label: `${item?.name} ${item?.year}`,
+      label: `${item?.title} ${item?.code}`,
     }));
 
 
-    const [createSemesterRegistration] = useCreateSemesterRegistrationMutation();
+    const [createCourse, {isLoading: createLoading}] = useCreateCourseMutation();
     
 
 
@@ -39,35 +35,29 @@ const CreateCoursePage = () => {
       ...data,
       code: Number(data.code),
       credits: Number(data.credits),
-      preRequisiteCourses: data.preRequisiteCourses?.map((item: string) => ({
+      preRequisiteCourses: data.preRequisiteCourses ? data.preRequisiteCourses?.map((item: string) => ({
         course: item,
         isDeleted: false,
-      })),
+      })) : []
     };
 
-  
-    //console.log(preRequisiteCourses);
+     const toastId = LoadingToast('Creating...') 
 
-    console.log(courseData);
-
-   
-
-    //  const toastId = LoadingToast('Creating...') 
-
-    // try {
-    //   await createSemesterRegistration(newSemesterData).unwrap();
-    //   SuccessToast("Academic Semester Create Success", toastId);
-    //   return true;
-    // } catch (err: any) {
-    //   if(err?.status === 400){
-    //     ErrorToast(err?.data?.message, toastId)
-    //   }
-    //   else{
-    //     ErrorToast("Something Went Wrong", toastId)
-    //   } 
-    // }
-
-
+    try {
+      await createCourse(courseData).unwrap();
+      SuccessToast("Course Create Success", toastId);
+      return true;
+    } catch (err: any) {
+      console.log(err);
+      if(err?.status === 400){
+        if(err?.data?.errorSources){
+          ErrorToast(err?.data?.errorSources?.[0]?.message, toastId)
+        }
+        else{
+           ErrorToast('Something Went Wrong', toastId)
+        }
+      }
+    }
   }
 
 
@@ -81,8 +71,8 @@ const CreateCoursePage = () => {
               <PHInput type="text" name="prefix" label="Prefix"/>
               <PHInput type="text" name="code" label="Code"/>
               <PHInput type="text" name="credits" label="Credits"/>
-              <PHMultiSelect name="preRequisiteCourses" label="PreRequisite Courses" options={monthOptions}/>
-              <Button htmlType="submit">Submit</Button>
+              <PHMultiSelect name="preRequisiteCourses" label="PreRequisite Courses (Optional)" options={preRequisiteCoursesOptions} disabled={isLoading}/>
+              <Button htmlType="submit" disabled={createLoading}>Submit</Button>
             </PHForm>
           </Col>
         </Flex>
