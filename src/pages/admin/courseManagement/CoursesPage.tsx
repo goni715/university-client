@@ -1,5 +1,6 @@
 import { Button, Table, TableColumnsType } from "antd";
 import { useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement/course/courseApi";
+import AssignFacultyModel from "../../../components/modal/AssignFacultyModel";
 
 interface TTableData {
   title: string;
@@ -41,7 +42,7 @@ const CoursesPage = () => {
       dataIndex: "action",
       render: () => (
         <>
-            <Button>Assign Faculty</Button>
+            <AssignFacultyModel/>
         </>
       ),
     },
