@@ -1,40 +1,51 @@
 import { Button, Modal } from "antd";
-import { useAppDispatch, useAppSelector } from "../../redux/hook/hook";
-import { SetBlockModalOpen } from "../../redux/features/modal/modalSlice";
-import { useChangeStatusMutation } from "../../redux/features/admin/userManagement/userManagementApi";
 import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
+import { useState } from "react";
+import { useAssignFacultyWithCourseMutation } from "../../redux/features/admin/courseManagement/courseFaculty/courseFacultyApi";
+import PHForm from "../form/PHForm";
+import PHMultiSelect from "../form/PHMultiSelect";
+import { monthOptions } from "../../constants/global";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 
-const AssignFacultyModel = () => {
-  const dispatch = useAppDispatch();
-  const { blockModalOpen } = useAppSelector((state)=>state.modal);
-  const { userId, status } = useAppSelector((state)=>state.user);
-  const [ changeStatus, {isLoading} ] = useChangeStatusMutation();
+type TProps = {
+  courseId: string
+}
 
-   
+const AssignFacultyModel = ( {courseId} : TProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ assignFacultyWithCourse, {isLoading}] = useAssignFacultyWithCourseMutation()
+
+
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
   const handleCancel = () => {
-    dispatch(SetBlockModalOpen(false));
+    setIsModalOpen(false);
   };
 
 
 
 
   //handleChancge status
-  const handleChangeStatus = async() => {
-    const toastId = LoadingToast('Processing...')
-    try{
-      await changeStatus({
-        id: userId,
-        data: {
-          status: status === 'in-progress' ? "blocked" : 'in-progress'
-        }
-      }).unwrap();
-      dispatch(SetBlockModalOpen(false));
-      SuccessToast('Success', toastId);
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    catch(err){
-      ErrorToast("Something Went Wrong", toastId)
-    }
+  const onSubmit: SubmitHandler<FieldValues> = async(data) => {
+    console.log(data);
+  //   const toastId = LoadingToast('Processing...')
+  //   try{
+  //     await changeStatus({
+  //       id: userId,
+  //       data: {
+  //         status: status === 'in-progress' ? "blocked" : 'in-progress'
+  //       }
+  //     }).unwrap();
+  //     dispatch(SetBlockModalOpen(false));
+  //     SuccessToast('Success', toastId);
+  //   }
+  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   catch(err){
+  //     ErrorToast("Something Went Wrong", toastId)
+  //   }
   }; 
 
 
@@ -42,24 +53,31 @@ const AssignFacultyModel = () => {
 
   return (
     <>
+    <Button onClick={showModal}>
+        Assign Faculty
+      </Button>
       <Modal
-        open={blockModalOpen}
-        title="Are you sure"
+        open={isModalOpen}
+        title="Assign Faculties with course"
         closable={false}
-        footer={[
+        footer={false}
+      >
+        <PHForm onSubmit={onSubmit}>
+          <PHMultiSelect name="faculties" label="Faculties" options={monthOptions}/>
+          <div style={{display:"flex", justifyContent:"end", rowGap:"10px"}}>
           <Button key="back" onClick={handleCancel}>
-            Cancel
+            Cancel{courseId}
           </Button>,
           <Button
             key="submit"
             type="primary"
             loading={isLoading}
-            onClick={handleChangeStatus}
+            htmlType="submit"
           >
             Confirm
           </Button>
-        ]}
-      >
+          </div>
+        </PHForm>
       </Modal>
     </>
   );

@@ -12,6 +12,7 @@ import SemesterRegistrationPage from "../pages/admin/courseManagement/SemesterRe
 import CreateAdminPage from "../pages/admin/userManagement/CreateAdminPage";
 import CreateFacultyPage from "../pages/admin/userManagement/CreateFacultyPage";
 import CreateStudentPage from "../pages/admin/userManagement/CreateStudentPage";
+import FacultiesPage from "../pages/admin/userManagement/FacultiesPage";
 import StudentListPage from "../pages/admin/userManagement/StudentListPage";
 import StudentUpdatePage from "../pages/admin/userManagement/StudentUpdatePage";
 
@@ -75,15 +76,20 @@ export const adminPaths = [
         element: <StudentListPage />,
       },
       {
+        label: "Create Faculty",
+        path: "create-faculty",
+        element: <CreateFacultyPage />,
+      },
+      {
+        label: "Faculties",
+        path: "faculties",
+        element: <FacultiesPage />,
+      },
+      {
         label: "Create Admin",
         path: "create-admin",
         element: <CreateAdminPage />,
       },
-      {
-        label: "Create Faculty",
-        path: "create-faculty",
-        element: <CreateFacultyPage />,
-      }
     ],
   },
   {

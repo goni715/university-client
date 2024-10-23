@@ -1,8 +1,9 @@
-import { Button, Table, TableColumnsType } from "antd";
+import { Table, TableColumnsType } from "antd";
 import { useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement/course/courseApi";
 import AssignFacultyModel from "../../../components/modal/AssignFacultyModel";
 
 interface TTableData {
+  _id: string;
   title: string;
   code: number;
 }
@@ -14,7 +15,7 @@ type TCourseData = {
 };
 
 const CoursesPage = () => {
-    const { data: coursesData, isLoading, isFetching } = useGetAllCoursesQuery([
+    const { data: coursesData, isFetching } = useGetAllCoursesQuery([
         {name: "sort", value: 'code'}
     ]);
 
@@ -40,9 +41,9 @@ const CoursesPage = () => {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      render: () => (
+      render: (_param, {_id}) => (
         <>
-            <AssignFacultyModel/>
+            <AssignFacultyModel courseId={_id}/>
         </>
       ),
     },

@@ -18,7 +18,7 @@ const userManagementApi = baseApi.injectEndpoints({
           body: data,
         }
       },
-      invalidatesTags: ["Students"],
+      invalidatesTags: ["Students", "Faculties"],
     }),
   }),
 });
