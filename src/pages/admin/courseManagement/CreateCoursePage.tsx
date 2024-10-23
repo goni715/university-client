@@ -20,7 +20,7 @@ const CreateCoursePage = () => {
     ]);
     const preRequisiteCoursesOptions = coursesData?.data?.map((item: { _id: string; title: string; code: number; }) => ({
       value: item?._id,
-      label: `${item?.title} ${item?.code}`,
+      label: `${item?.title}`,
     }));
 
 
