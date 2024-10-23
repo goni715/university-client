@@ -9,14 +9,15 @@ import {
 } from "../../../helper/ValidationHelper";
 import { AcademicDepartmentSchema } from "../../../schemas/academicManagement.schema";
 import PHInput from "../../../components/form/PHInput";
-import PHSelect from "../../../components/form/PHSelect";
 import PHForm from "../../../components/form/PHForm";
 import { useGetAllAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement/academicFaculty/academicFacultyApi";
 import PHSelectWithWatch from "../../../components/form/PHSelectWithWatch";
+import { useState } from "react";
 
 
 
 const CreateOfferedCoursePage = () => {
+    const [id, setId] = useState('')
   const { data: facultyData, isLoading } = useGetAllAcademicFacultiesQuery(undefined);
   const academicFacultyOptions = facultyData?.data?.map((item) => ({
     value: item?._id,
@@ -24,6 +25,12 @@ const CreateOfferedCoursePage = () => {
   }));
 
   const [addAcademicDepartment] = useAddAcademicDepartmentMutation();
+
+
+ console.log(id);
+
+
+
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = LoadingToast("Creating...");
@@ -54,8 +61,9 @@ const CreateOfferedCoursePage = () => {
               label="Academic Faculty"
               options={academicFacultyOptions}
               disabled={isLoading}
+              setId={setId}
             />
-             <PHInput type="text" name="name" label="Name" />
+             <PHInput type="text" name="name" label="Name" disabled={!id} />
             <Button htmlType="submit">Submit</Button>
           </PHForm>
         </Col>

@@ -1,22 +1,27 @@
 import { Form, Select } from "antd";
+import { useEffect } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 type TPHSelectProps = {
   name: string;
   label: string;
   options: { value: string; label: string; disabled?: boolean}[] | undefined,
-  disabled?: boolean
+  disabled?: boolean;
+  setId: React.Dispatch<React.SetStateAction<string>>
 }
 
 
-const PHSelectWithWatch = ({name, label, options, disabled } : TPHSelectProps) => {
+const PHSelectWithWatch = ({name, label, options, disabled, setId } : TPHSelectProps) => {
   const {control, formState: { errors } } = useFormContext();
-  const value = useWatch({
+  const inputValue = useWatch({
     control,
     name
   })
 
-  console.log(value);
+ 
+  useEffect(()=>{
+    setId(inputValue)
+  },[inputValue, setId])
  
 
 
