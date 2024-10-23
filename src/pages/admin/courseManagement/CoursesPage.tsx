@@ -1,4 +1,4 @@
-import { Table, TableColumnsType } from "antd";
+import { Button, Table, TableColumnsType } from "antd";
 import { useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement/course/courseApi";
 import AssignFacultyModel from "../../../components/modal/AssignFacultyModel";
 
@@ -44,6 +44,16 @@ const CoursesPage = () => {
       render: (_param, {_id}) => (
         <>
             <AssignFacultyModel courseId={_id}/>
+        </>
+      ),
+    },
+    {
+      title: "Remove Faculty",
+      key: "remove",
+      dataIndex: "removeFaculty",
+      render: (_param, {_id}) => (
+        <>
+            <><Button >Remove Faculty</Button></>
         </>
       ),
     },
