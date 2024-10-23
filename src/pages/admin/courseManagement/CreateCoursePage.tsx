@@ -34,20 +34,16 @@ const CreateCoursePage = () => {
 
 
   const onSubmit : SubmitHandler<FieldValues> = async(data) => {
-    let preRequisiteCourses = [];
-    if(data.preRequisiteCourses?.length > 0){
-        preRequisiteCourses = data.preRequisiteCourses.map((item:string)=> ({
-            course: item,
-            isDeleted: false
-        }))
-    }
 
     const courseData = {
       ...data,
       code: Number(data.code),
       credits: Number(data.credits),
-      preRequisiteCourses
-    }
+      preRequisiteCourses: data.preRequisiteCourses?.map((item: string) => ({
+        course: item,
+        isDeleted: false,
+      })),
+    };
 
   
     //console.log(preRequisiteCourses);
