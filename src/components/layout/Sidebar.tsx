@@ -4,8 +4,9 @@ import { adminPaths } from "../../routes/adminRoutes";
 import { facultyPaths } from "../../routes/facultyRoutes";
 import { studentPaths } from "../../routes/studentRoutes";
 import { useAppSelector } from "../../redux/hook/hook";
-import { selectUser } from "../../redux/features/auth/authSlice";
+import { selectToken, TUser } from "../../redux/features/auth/authSlice";
 import { useLocation } from "react-router-dom";
+import verifyToken from "../../utils/verifyToken";
 
 const { Sider } = Layout;
 
@@ -17,11 +18,15 @@ const UserRole = {
 
 
 const Sidebar = () => {
-  const { pathname } = useLocation()
-  const user = useAppSelector(selectUser);
+  const { pathname } = useLocation();
+  const token = useAppSelector(selectToken);
+  let user;
+  if(token){
+      user = verifyToken(token)
+  }
   let sidebarItems;
 
-  switch(user!.role){
+  switch((user as TUser)!.role){
     case UserRole.ADMIN:
       sidebarItems = sidebarItemsGenerator(adminPaths, UserRole.ADMIN);
       break;
