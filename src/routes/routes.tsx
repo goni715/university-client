@@ -7,6 +7,8 @@ import { adminPaths } from "./adminRoutes";
 import { facultyPaths } from "./facultyRoutes";
 import { studentPaths } from "./studentRoutes";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
+import ChangePasswordPage from "../pages/auth/ChangePasswordPage";
+import PublicRoute from "../components/layout/PublicRoute";
 
 const router = createBrowserRouter([
   {
@@ -42,11 +44,27 @@ const router = createBrowserRouter([
   },
   {
     path: "/login", //absolute path
-    element: <LoginPage />,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: "/change-password", //absolute path
+    element: (
+      <PublicRoute>
+        <ChangePasswordPage />
+      </PublicRoute>
+    ),
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+    element: (
+      <PublicRoute>
+        <RegisterPage />
+      </PublicRoute>
+    ),
   },
 ]);
 
