@@ -11,16 +11,18 @@ const studentCourseManagementApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["StudentOfferedCourses"]
     }),
-    createOfferedCourse: builder.mutation({
+    enrollCourse: builder.mutation({
       query: (data) => ({
-        url: `/offered-course/create-offered-course`,
+        url: `/enrolled-course/create-enrolled-course`,
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["StudentOfferedCourses"]
     }),
   }),
 });
 
-export const { useGetStudentAllOfferedCoursesQuery } =
+export const { useGetStudentAllOfferedCoursesQuery, useEnrollCourseMutation } =
 studentCourseManagementApi;
