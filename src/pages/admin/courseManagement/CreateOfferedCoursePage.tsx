@@ -2,12 +2,6 @@ import { Button, Col, Flex } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddAcademicDepartmentMutation, useGetAllDepartmentsQuery } from "../../../redux/features/admin/academicManagement/academicDepartment/academicDepartmentApi";
-import {
-  ErrorToast,
-  LoadingToast,
-  SuccessToast,
-} from "../../../helper/ValidationHelper";
-import { AcademicDepartmentSchema } from "../../../schemas/academicManagement.schema";
 import PHInput from "../../../components/form/PHInput";
 import PHForm from "../../../components/form/PHForm";
 import PHSelectWithWatch from "../../../components/form/PHSelectWithWatch";
@@ -21,6 +15,8 @@ import PHMultiSelect from "../../../components/form/PHMultiSelect";
 import { daysOptions } from "../../../constants/global";
 import PHTimePicker from "../../../components/form/PHTimePicker";
 import { createOfferedCourseSchema } from "../../../schemas/offeredCourse.schema";
+import { useCreateOfferedCourseMutation } from "../../../redux/features/admin/courseManagement/offeredCoure/offeredCourseApi";
+import { ErrorToast, LoadingToast, SuccessToast } from "../../../helper/ValidationHelper";
 
 
 
@@ -54,9 +50,7 @@ const CreateOfferedCoursePage = () => {
       label: item?.title,
     }));
 
-
     const { data: facultiesData } = useGetCourseFacultiesQuery(courseId, {skip: !courseId});
-    //console.log(facultiesData?.data?.faculties);
     const coursefaculties = facultiesData?.data?.faculties;
     const coursefacultiesOptions = coursefaculties?.map((item) => ({
       value: item?._id,
@@ -64,34 +58,38 @@ const CreateOfferedCoursePage = () => {
     }));
 
     
+    const [ createOfferedCourse ] = useCreateOfferedCourseMutation();
 
   
 
 
 
 
-  const [addAcademicDepartment] = useAddAcademicDepartmentMutation();
-
-
-
-
-
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-    // const toastId = LoadingToast("Creating...");
-    // try {
-    //   await addAcademicDepartment(data).unwrap();
-    //   SuccessToast("Academic Department Create Success", toastId);
-    //   return true;
-    // } catch (err: any) {
-    //   if (err?.status === 400) {
-    //     ErrorToast("This Department existed", toastId);
-    //   }
-    //   if (err?.status === 500) {
-    //     ErrorToast("Something Went Wrong", toastId);
-    //   }
-    // }
+    const toastId = LoadingToast("Creating...");
+    const offeredCourseData = {
+      ...data,
+      maxCapacity: Number(data.maxCapacity),
+      section: Number(data.section)
+    }
+    try {
+      await createOfferedCourse(offeredCourseData).unwrap();
+      SuccessToast("Academic Department Create Success", toastId);
+      return true;
+    } catch (err: any) {     
+      if(err?.status === 400){
+        ErrorToast(err?.data?.message, toastId)
+      }
+      else if(err?.status === 409){
+        ErrorToast(err?.data?.message, toastId)
+      }
+      else{
+        ErrorToast("Something Went Wrong", toastId);
+      }
+    }
   };
+
+  
 
   return (
     <>

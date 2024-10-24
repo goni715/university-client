@@ -1,7 +1,7 @@
 import { baseApi } from "../../../api/baseApi";
 
 
-const offeredCourseApi = baseApi.injectEndpoints({
+const courseFacultyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCourseFaculties: builder.query({
       query: (courseId) => {
@@ -11,15 +11,15 @@ const offeredCourseApi = baseApi.injectEndpoints({
         };
       },
     }),
-    createOfferedCourse: builder.mutation({
-      query: (data) => ({
-        url: `/offered-course/create-offered-course`,
-        method: "POST",
+    assignFacultyWithCourse: builder.mutation({
+      query: ({data, courseId}) => ({
+        url: `/course-faculty/assign-faculties-with-course/${courseId}`,
+        method: "PUT",
         body: data,
       }),
     }),
   }),
 });
 
-export const { useCreateOfferedCourseMutation } =
-offeredCourseApi;
+export const { useGetCourseFacultiesQuery, useAssignFacultyWithCourseMutation } =
+courseFacultyApi;
