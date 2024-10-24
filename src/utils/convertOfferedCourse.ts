@@ -1,3 +1,5 @@
+import { TOfferedCourseItem } from "../types/offeredCourse.type";
+
 type TArrayItem = {
     title: string; 
     section: number;
@@ -17,7 +19,7 @@ type TResultItem  = {
   }
 
 
-const convertOfferedCourse = ((arr: any[]) => {
+const convertOfferedCourse = ((arr: TOfferedCourseItem[]) => {
 
     const arrayOne: TArrayItem[] = arr?.map((item)=> ({
         title: item?.course?.title,
