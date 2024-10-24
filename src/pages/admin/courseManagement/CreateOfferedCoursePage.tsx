@@ -20,6 +20,7 @@ import { useGetCourseFacultiesQuery } from "../../../redux/features/admin/course
 import PHMultiSelect from "../../../components/form/PHMultiSelect";
 import { daysOptions } from "../../../constants/global";
 import PHTimePicker from "../../../components/form/PHTimePicker";
+import { createOfferedCourseSchema } from "../../../schemas/offeredCourse.schema";
 
 
 
@@ -98,6 +99,7 @@ const CreateOfferedCoursePage = () => {
         <Col span={6}>
           <PHForm
             onSubmit={onSubmit}
+            resolver={zodResolver(createOfferedCourseSchema)}
           >
             <PHSelect
               name="semesterRegistration"
