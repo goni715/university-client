@@ -6,9 +6,10 @@ import routesGenerator from "../utils/routesGenerator";
 import { adminPaths } from "./adminRoutes";
 import { facultyPaths } from "./facultyRoutes";
 import { studentPaths } from "./studentRoutes";
-import ProtectedRoute from "../components/layout/ProtectedRoute";
 import ChangePasswordPage from "../pages/auth/ChangePasswordPage";
 import PublicRoute from "../components/layout/PublicRoute";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
+
 
 const router = createBrowserRouter([
   {
@@ -45,17 +46,15 @@ const router = createBrowserRouter([
   {
     path: "/login", //absolute path
     element: (
-      <PublicRoute>
         <LoginPage />
-      </PublicRoute>
     ),
   },
   {
     path: "/change-password", //absolute path
     element: (
-      <PublicRoute>
+      <ProtectedRoute role={undefined}>
         <ChangePasswordPage />
-      </PublicRoute>
+      </ProtectedRoute>
     ),
   },
   {
@@ -65,6 +64,10 @@ const router = createBrowserRouter([
         <RegisterPage />
       </PublicRoute>
     ),
+  },
+  {
+    path: "/*",
+    element: <h1>Page Not Found</h1>
   },
 ]);
 

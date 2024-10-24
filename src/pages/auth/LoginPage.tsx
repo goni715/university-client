@@ -4,7 +4,6 @@ import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hook/hook";
 import { setUser, TUser } from "../../redux/features/auth/authSlice";
 import verifyToken from "../../utils/verifyToken";
-import { useNavigate } from "react-router-dom";
 import {
   ErrorToast,
   LoadingToast,
@@ -14,6 +13,7 @@ import PHInput from "../../components/form/PHInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../../schemas/auth.schema";
 import PHForm from "../../components/form/PHForm";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ const LoginPage = () => {
   const [login, {isLoading}] = useLoginMutation();
 
   const defaultValues = {
-    id: "A-0001",
-    password: "123456",
+    id: "2024010001",
+    password: "university",
   };
 
   const onSubmit = async (data: FieldValues) => {
@@ -33,7 +33,14 @@ const LoginPage = () => {
       const user = verifyToken(res.data.accessToken) as TUser;
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       SuccessToast("Login Success", toastId);
-      navigate(`/${user?.role}/dashboard`);
+      
+      if(res.data.needsPasswordChange){
+        navigate(`/change-password`)
+      }
+      else{
+        navigate(`/${user?.role}/dashboard`)
+      }
+
     } catch (err: any) {
       if (err?.status === 404) {
         ErrorToast("Couild not find this ID", toastId);

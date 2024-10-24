@@ -5,24 +5,23 @@ import { Navigate } from "react-router-dom";
 import verifyToken from "../../utils/verifyToken";
 
 type TPublicRoute = {
-     children: ReactNode;
-}
+  children: ReactNode;
+};
+
+const PublicRoute = ({ children }: TPublicRoute) => {
+  const token = useAppSelector(selectToken);
+
+  let user;
+  if (token) {
+    user = verifyToken(token) as TUser;
+  }
 
 
-const PublicRoute = ({children} : TPublicRoute) => {
-    const token = useAppSelector(selectToken);
+  if (token) {
+    return <Navigate to={`/${user?.role}/dashboard`} replace={true} />;
+  }
 
-    let user;
-    if(token){
-        user = verifyToken(token) as TUser;
-    }
-
-
-    if(token){
-        return <Navigate to={`/${user?.role}/dashboard`} replace={true} />
-    }
-
-    return children;
+  return children;
 };
 
 export default PublicRoute;
