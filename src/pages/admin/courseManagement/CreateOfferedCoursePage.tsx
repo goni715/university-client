@@ -16,6 +16,10 @@ import { useGetAllSemesterRegistrationsQuery } from "../../../redux/features/adm
 import { useGetAllAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement/academicFaculty/academicFacultyApi";
 import PHSelect from "../../../components/form/PHSelect";
 import { useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement/course/courseApi";
+import { useGetCourseFacultiesQuery } from "../../../redux/features/admin/courseManagement/courseFaculty/courseFacultyApi";
+import PHMultiSelect from "../../../components/form/PHMultiSelect";
+import { daysOptions } from "../../../constants/global";
+import PHTimePicker from "../../../components/form/PHTimePicker";
 
 
 
@@ -49,6 +53,17 @@ const CreateOfferedCoursePage = () => {
       label: item?.title,
     }));
 
+
+    const { data: facultiesData } = useGetCourseFacultiesQuery(courseId, {skip: !courseId});
+    //console.log(facultiesData?.data?.faculties);
+    const coursefaculties = facultiesData?.data?.faculties;
+    const coursefacultiesOptions = coursefaculties?.map((item) => ({
+      value: item?._id,
+      label: item?.fullName,
+    }));
+
+    
+
   
 
 
@@ -61,19 +76,20 @@ const CreateOfferedCoursePage = () => {
 
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = LoadingToast("Creating...");
-    try {
-      await addAcademicDepartment(data).unwrap();
-      SuccessToast("Academic Department Create Success", toastId);
-      return true;
-    } catch (err: any) {
-      if (err?.status === 400) {
-        ErrorToast("This Department existed", toastId);
-      }
-      if (err?.status === 500) {
-        ErrorToast("Something Went Wrong", toastId);
-      }
-    }
+    console.log(data);
+    // const toastId = LoadingToast("Creating...");
+    // try {
+    //   await addAcademicDepartment(data).unwrap();
+    //   SuccessToast("Academic Department Create Success", toastId);
+    //   return true;
+    // } catch (err: any) {
+    //   if (err?.status === 400) {
+    //     ErrorToast("This Department existed", toastId);
+    //   }
+    //   if (err?.status === 500) {
+    //     ErrorToast("Something Went Wrong", toastId);
+    //   }
+    // }
   };
 
   return (
@@ -82,20 +98,43 @@ const CreateOfferedCoursePage = () => {
         <Col span={6}>
           <PHForm
             onSubmit={onSubmit}
-            resolver={zodResolver(AcademicDepartmentSchema)}
-          >  
-            <PHSelectWithWatch
+          >
+            <PHSelect
               name="semesterRegistration"
               label="Semester Registration"
               options={semesterRegOptions}
               disabled={isLoading}
-              onValueChaneg={setCourseId}
             />
-            <PHSelect name="academicFaculty" label="Academic Faculty" options={academicFacultyOptions} disabled={facultyLoading}/>
-            <PHSelect name="academicFaculty" label="Academic Faculty" options={academicDepartmentOptions} disabled={deptLoading}/>
-            <PHSelect name="course" label="Course" options={courseOptions} disabled={courseLoading}/>
-            <PHSelect name="faculty" label="Course" options={courseOptions} disabled={courseLoading}/>
-             <PHInput type="text" name="name" label="Name"  />
+            <PHSelect
+              name="academicFaculty"
+              label="Academic Faculty"
+              options={academicFacultyOptions}
+              disabled={facultyLoading}
+            />
+            <PHSelect
+              name="academicDepartment"
+              label="Academic Department"
+              options={academicDepartmentOptions}
+              disabled={deptLoading}
+            />
+            <PHSelectWithWatch
+              onValueChange={setCourseId}
+              name="course"
+              label="Course"
+              options={courseOptions}
+              disabled={courseLoading}
+            />
+            <PHSelect
+              name="faculty"
+              label="Faculty"
+              options={coursefacultiesOptions}
+              disabled={!coursefaculties}
+            />
+            <PHInput type="text" name="maxCapacity" label="Max Capacity" />
+            <PHInput type="text" name="section" label="Section" />
+            <PHMultiSelect name="days" label="Days" options={daysOptions}/>
+            <PHTimePicker name="startTime" label="Start Time" />
+            <PHTimePicker name="endTime" label="End Time" />
             <Button htmlType="submit">Submit</Button>
           </PHForm>
         </Col>

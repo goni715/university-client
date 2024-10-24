@@ -7,11 +7,11 @@ type TPHSelectProps = {
   label: string;
   options: { value: string; label: string; disabled?: boolean}[] | undefined,
   disabled?: boolean;
-  onValueChaneg: React.Dispatch<React.SetStateAction<string>>
+  onValueChange: React.Dispatch<React.SetStateAction<string>>
 }
 
 
-const PHSelectWithWatch = ({name, label, options, disabled, onValueChaneg } : TPHSelectProps) => {
+const PHSelectWithWatch = ({name, label, options, disabled, onValueChange } : TPHSelectProps) => {
   const {control, formState: { errors } } = useFormContext();
   const inputValue = useWatch({
     control,
@@ -20,8 +20,8 @@ const PHSelectWithWatch = ({name, label, options, disabled, onValueChaneg } : TP
 
  
   useEffect(()=>{
-    onValueChaneg(inputValue)
-  },[inputValue, onValueChaneg])
+    onValueChange(inputValue)
+  },[inputValue, onValueChange])
  
 
 
