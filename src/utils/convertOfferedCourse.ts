@@ -4,28 +4,36 @@ type TArrayItem = {
     title: string; 
     section: number;
     _id: string;
+    days: string[];
+    startTime: string;
+    endTime: string;
 }
 
 
-type TResultItem  = {
-    title: string;
-    sections: [
-        {
-            section: number;
-            _id: string;
-        }
-       
-    ]
-  }
+type TResultItem = {
+  title: string;
+  sections: [
+    {
+      section: number;
+      _id: string;
+      days: string[];
+      startTime: string;
+      endTime: string;
+    }
+  ];
+};
 
 
 const convertOfferedCourse = ((arr: TOfferedCourseItem[]) => {
 
-    const arrayOne: TArrayItem[] = arr?.map((item)=> ({
-        title: item?.course?.title,
-        section: item?.section,
-        _id: item?._id,
-    }))
+    const arrayOne: TArrayItem[] = arr?.map((item) => ({
+      title: item?.course?.title,
+      section: item?.section,
+      _id: item?._id,
+      days: item?.days,
+      startTime: item?.startTime,
+      endTime: item?.endTime,
+    }));
 
 
 
@@ -35,12 +43,27 @@ const convertOfferedCourse = ((arr: TOfferedCourseItem[]) => {
       
         if (existing) {
           // If the title exists, add the section and _id to its sections array
-          existing.sections.push({ section: item.section, _id: item._id });
+          existing.sections.push({
+             section: item.section,
+              _id: item?._id,
+              days: item?.days,
+              startTime: item?.startTime,
+              endTime: item?.endTime,
+            });
+
         } else {
           // If the title does not exist, create a new entry
           acc.push({
             title: item.title,
-            sections: [{ section: item.section, _id: item._id }]
+            sections: [
+                { 
+                    section: item.section,
+                     _id: item._id ,
+                     days: item?.days,
+                     startTime: item?.startTime,
+                     endTime: item?.endTime,
+                }
+            ]
           });
         }
       
