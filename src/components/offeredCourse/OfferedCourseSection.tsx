@@ -6,7 +6,6 @@ import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationH
 const OfferedCourseSection = ( {section} : any) => {
     const [ enrollCourse, {isLoading} ] = useEnrollCourseMutation();
 
-    console.log(section);
 
     
       

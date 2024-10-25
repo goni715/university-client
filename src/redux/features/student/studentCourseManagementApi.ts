@@ -21,8 +21,17 @@ const studentCourseManagementApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["StudentOfferedCourses"]
     }),
+    getMyEnrolledCourses: builder.query({
+      query: () => {
+        return {
+          url: `/enrolled-course/get-my-enrolled-courses`,
+          method: "GET",
+        };
+      },
+      providesTags: ["EnrolledCourses"]
+    }),
   }),
 });
 
-export const { useGetStudentAllOfferedCoursesQuery, useEnrollCourseMutation } =
+export const { useGetStudentAllOfferedCoursesQuery, useEnrollCourseMutation, useGetMyEnrolledCoursesQuery} =
 studentCourseManagementApi;
