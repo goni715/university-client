@@ -3,12 +3,16 @@ import { useGetFacultyEnrolledCoursesQuery } from "../../redux/features/faculty/
 import facultySemesterOptions from "../../utils/facultySemesterOptions";
 import PHForm from "../../components/form/PHForm";
 import PHSelect from "../../components/form/PHSelect";
+import facultyCourseOptions from "../../utils/facultyCourseOptions";
 
 
 const MyCoursesPage = () => {
     const { data, isLoading } = useGetFacultyEnrolledCoursesQuery(undefined);
     const semesterOptions = facultySemesterOptions(data?.data);
-    console.log(semesterOptions);
+    const courseOptions = facultyCourseOptions(data?.data);
+
+
+    console.log(courseOptions);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -27,6 +31,12 @@ const MyCoursesPage = () => {
                 name="semesterRegistration"
                 label="Semester"
                 options={semesterOptions}
+                disabled={isLoading}
+              />
+               <PHSelect
+                name="course"
+                label="Course"
+                options={courseOptions}
                 disabled={isLoading}
               />
               <Button htmlType="submit">Submit</Button>
