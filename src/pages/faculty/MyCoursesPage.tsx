@@ -4,18 +4,33 @@ import facultySemesterOptions from "../../utils/facultySemesterOptions";
 import PHForm from "../../components/form/PHForm";
 import PHSelect from "../../components/form/PHSelect";
 import facultyCourseOptions from "../../utils/facultyCourseOptions";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 
 
 const MyCoursesPage = () => {
     const { data, isLoading } = useGetFacultyEnrolledCoursesQuery(undefined);
     const semesterOptions = facultySemesterOptions(data?.data);
     const courseOptions = facultyCourseOptions(data?.data);
+    const navigate = useNavigate()
 
 
-    console.log(courseOptions);
+    
+const fiterSchema = z.object({
+    semesterRegistration: z.string({
+      required_error: "Please Select a Semester",
+    }),
+    course: z.string({
+        required_error: "Select a Course",
+      })
+  });
 
-  const onSubmit = (data) => {
+  const onSubmit : SubmitHandler<FieldValues> = (data) => {
     console.log(data);
+    navigate(`/faculty/courses/${data.semesterRegistration}/${data.course}`)
+
   }
 
 
@@ -26,6 +41,7 @@ const MyCoursesPage = () => {
           <Col span={6}>
             <PHForm
               onSubmit={onSubmit}
+              resolver={zodResolver(fiterSchema)}
             >
               <PHSelect
                 name="semesterRegistration"

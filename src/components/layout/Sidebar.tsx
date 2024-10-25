@@ -7,6 +7,7 @@ import { useAppSelector } from "../../redux/hook/hook";
 import { selectToken, TUser } from "../../redux/features/auth/authSlice";
 import { useLocation } from "react-router-dom";
 import verifyToken from "../../utils/verifyToken";
+import { TSidebarItem } from "../../types";
 
 const { Sider } = Layout;
 
@@ -24,17 +25,17 @@ const Sidebar = () => {
   if(token){
       user = verifyToken(token)
   }
-  let sidebarItems;
+  let sidebarItems: any[] = []
 
   switch((user as TUser)!.role){
     case UserRole.ADMIN:
-      sidebarItems = sidebarItemsGenerator(adminPaths, UserRole.ADMIN);
+      sidebarItems = sidebarItemsGenerator(adminPaths, UserRole.ADMIN) as TSidebarItem[];
       break;
     case UserRole.FACULTY:
-      sidebarItems = sidebarItemsGenerator(facultyPaths, UserRole.FACULTY);
+      sidebarItems = sidebarItemsGenerator(facultyPaths, UserRole.FACULTY) as TSidebarItem[];
       break;
     case UserRole.STUDENT:
-        sidebarItems = sidebarItemsGenerator(studentPaths, UserRole.STUDENT);
+        sidebarItems = sidebarItemsGenerator(studentPaths, UserRole.STUDENT) as TSidebarItem[];
         break;
     default:
       break;
