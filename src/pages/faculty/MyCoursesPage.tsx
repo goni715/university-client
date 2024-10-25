@@ -1,18 +1,39 @@
+import { Button, Col, Flex } from "antd";
 import { useGetFacultyEnrolledCoursesQuery } from "../../redux/features/faculty/facultyCourseManagementApi";
 import facultySemesterOptions from "../../utils/facultySemesterOptions";
+import PHForm from "../../components/form/PHForm";
+import PHSelect from "../../components/form/PHSelect";
 
 
 const MyCoursesPage = () => {
-    const { data } = useGetFacultyEnrolledCoursesQuery(undefined);
+    const { data, isLoading } = useGetFacultyEnrolledCoursesQuery(undefined);
     const semesterOptions = facultySemesterOptions(data?.data);
     console.log(semesterOptions);
+
+  const onSubmit = (data) => {
+    console.log(data);
+  }
 
 
 
     return (
-        <>
-           <h1>This is My Courses Page</h1> 
-        </>
+      <>
+        <Flex justify="center" align="center" style={{ minHeight: "80vh" }}>
+          <Col span={6}>
+            <PHForm
+              onSubmit={onSubmit}
+            >
+              <PHSelect
+                name="semesterRegistration"
+                label="Semester"
+                options={semesterOptions}
+                disabled={isLoading}
+              />
+              <Button htmlType="submit">Submit</Button>
+            </PHForm>
+          </Col>
+        </Flex>
+      </>
     );
 };
 
