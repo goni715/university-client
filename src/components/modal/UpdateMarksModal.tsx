@@ -6,6 +6,9 @@ import PHForm from "../form/PHForm";
 import PHMultiSelect from "../form/PHMultiSelect";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useGetAllFacultiesQuery } from "../../redux/features/admin/faculty/facultyApi";
+import PHInput from "../form/PHInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { marksSchema } from "../../schemas/marks.schema";
 
 type TProps = {
   courseId: string
@@ -21,7 +24,6 @@ const UpdateMarksModal = (props : any) => {
 
   const [ assignFacultyWithCourse, { isLoading:assignLoading }] = useAssignFacultyWithCourseMutation()
 
-console.log(props);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -36,6 +38,7 @@ console.log(props);
 
   //handleChancge status
   const onSubmit: SubmitHandler<FieldValues> = async(data) => {
+    console.log(data);
     // const toastId = LoadingToast('Processing...')
   
     // try{
@@ -65,12 +68,11 @@ console.log(props);
         closable={false}
         footer={false}
       >
-        <PHForm onSubmit={onSubmit}>
-          <PHMultiSelect
-            name="faculties"
-            label="Faculties"
-            options={facultiesOptions}
-          />
+        <PHForm onSubmit={onSubmit} resolver={zodResolver(marksSchema)}>
+          <PHInput type="text" name="classTest1" label="Class Text 1"/>
+          <PHInput type="text" name="midTerm" label="Mid Term"/>
+          <PHInput type="text" name="classTest2" label="Class Text 2"/>
+          <PHInput type="text" name="Final Term" label="Final Term"/>
           <div
             style={{ display: "flex", justifyContent: "end", rowGap: "10px" }}
           >

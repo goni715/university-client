@@ -1,5 +1,5 @@
 import { Form, Input } from "antd";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 
 type TInputProps = {
@@ -11,6 +11,14 @@ type TInputProps = {
 
 
 const PHInput = ({ type, name, label, disabled } : TInputProps) => {
+  const {control, formState: {errors}} = useFormContext();
+  const watch = useWatch({
+    control: control,
+    name
+  })
+
+  console.log(watch);
+
 
     return (
       <>
