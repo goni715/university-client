@@ -1,11 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useGetFacultyEnrolledCoursesQuery } from "../../redux/features/faculty/facultyCourseManagementApi";
-import { Button, Table, TableColumnsType } from "antd";
+import { Table, TableColumnsType } from "antd";
+import UpdateMarksModal from "../../components/modal/UpdateMarksModal";
 
 type TTableDataType = {
   name: string;
   key: string;
-  id: string
+  id: string;
+  studentId: string;
+  semesterRegistration:string;
+  offeredCourse: string;
 }
 
 
@@ -16,14 +20,16 @@ const MyStudentsPage = () => {
     { name: 'course', value: courseId }
   ]);
 
-  const tableData = facultyCoursesData?.data?.map(({ _id, student} : any)=> ({
+  const tableData = facultyCoursesData?.data?.map(({ _id, student, academicSemester, semesterRegistration, offeredCourse} : any)=> ({
     key:_id,
-    _id,
     name: student?.fullName,
-    id: student?.id
+    id: student?.id,
+    studentId: student?._id,
+    semester: academicSemester?.name+" "+ academicSemester?.year,
+    semesterRegistration: semesterRegistration?._id,
+    offeredCourse: offeredCourse?._id,
 }));
 
-console.log(tableData);
 
 
   
@@ -39,19 +45,17 @@ console.log(tableData);
       dataIndex: 'id'
     },
     {
-        title: 'End Month',
-        key: "endMonth",
-        dataIndex: 'endMonth'
+      title: 'Semester',
+      key: "semester",
+      dataIndex: 'semester'
     },
     {
         title: 'Action',
         key: "action",
         dataIndex: 'action',
-        render: () => (
+        render: (_param,{semesterRegistration, offeredCourse, studentId}) => (
           <>
-          <div>
-            <Button>Update</Button>
-          </div>
+          <UpdateMarksModal semesterRegistration={semesterRegistration} offeredCourse={offeredCourse} studentId={studentId} />
           </>
         )
     },
