@@ -19,7 +19,7 @@ const studentCourseManagementApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["StudentOfferedCourses"]
+      invalidatesTags: ["StudentOfferedCourses", "EnrolledCourses"]
     }),
     getMyEnrolledCourses: builder.query({
       query: () => {
