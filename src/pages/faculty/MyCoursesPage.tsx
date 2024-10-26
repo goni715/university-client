@@ -28,9 +28,7 @@ const fiterSchema = z.object({
   });
 
   const onSubmit : SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
     navigate(`/faculty/courses/${data.semesterRegistration}/${data.course}`)
-
   }
 
 

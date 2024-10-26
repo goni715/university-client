@@ -1,5 +1,9 @@
 import { Button, Modal } from "antd";
-import { ErrorToast, LoadingToast, SuccessToast } from "../../helper/ValidationHelper";
+import {
+  ErrorToast,
+  LoadingToast,
+  SuccessToast,
+} from "../../helper/ValidationHelper";
 import { useState } from "react";
 import { useAssignFacultyWithCourseMutation } from "../../redux/features/admin/courseManagement/courseFaculty/courseFacultyApi";
 import PHForm from "../form/PHForm";
@@ -11,19 +15,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { marksSchema } from "../../schemas/marks.schema";
 
 type TProps = {
-  courseId: string
-}
+  courseId: string;
+};
 
-const UpdateMarksModal = (props : any) => {
+const UpdateMarksModal = (props: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: facultiesData, isLoading } = useGetAllFacultiesQuery(undefined);
-  const facultiesOptions = facultiesData?.data?.map((item: { _id: string; fullName: string; }) => ({
-    value: item?._id,
-    label: item?.fullName,
-  }));
+  const facultiesOptions = facultiesData?.data?.map(
+    (item: { _id: string; fullName: string }) => ({
+      value: item?._id,
+      label: item?.fullName,
+    })
+  );
 
-  const [ assignFacultyWithCourse, { isLoading:assignLoading }] = useAssignFacultyWithCourseMutation()
-
+  const [assignFacultyWithCourse, { isLoading: assignLoading }] =
+    useAssignFacultyWithCourseMutation();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -33,14 +39,11 @@ const UpdateMarksModal = (props : any) => {
     setIsModalOpen(false);
   };
 
-
-
-
   //handleChancge status
-  const onSubmit: SubmitHandler<FieldValues> = async(data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log(data);
     // const toastId = LoadingToast('Processing...')
-  
+
     // try{
     //   await assignFacultyWithCourse({
     //     courseId,
@@ -54,10 +57,7 @@ const UpdateMarksModal = (props : any) => {
     // catch(err){
     //   ErrorToast("Something Went Wrong", toastId)
     // }
-  }; 
-
-
-
+  };
 
   return (
     <>
@@ -69,10 +69,10 @@ const UpdateMarksModal = (props : any) => {
         footer={false}
       >
         <PHForm onSubmit={onSubmit} resolver={zodResolver(marksSchema)}>
-          <PHInput type="text" name="classTest1" label="Class Text 1"/>
-          <PHInput type="text" name="midTerm" label="Mid Term"/>
-          <PHInput type="text" name="classTest2" label="Class Text 2"/>
-          <PHInput type="text" name="Final Term" label="Final Term"/>
+          <PHInput type="text" name="classTest1" label="Class Text 1" />
+          <PHInput type="text" name="midTerm" label="Mid Term" />
+          <PHInput type="text" name="classTest2" label="Class Text 2" />
+          <PHInput type="text" name="finalTerm" label="Final Term" />
           <div
             style={{ display: "flex", justifyContent: "end", rowGap: "10px" }}
           >
