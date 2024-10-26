@@ -28,8 +28,8 @@ export const marksSchema = z.object({
     .refine((value) => /^\d+$/.test(value), {
       message: "Mid Term must only contain integer Numbers",
     })
-    .refine((value) => Number(value) <= 10, {
-      message: "Mid Term maximum 10 marks",
+    .refine((value) => Number(value) <= 30, {
+      message: "Mid Term maximum 30 marks",
     })
     .default("0"),
   classTest2: z
@@ -58,8 +58,8 @@ export const marksSchema = z.object({
     .refine((value) => /^\d+$/.test(value), {
       message: "Final Term must only contain Integer Numbers",
     })
-    .refine((value) => Number(value) <= 10, {
-      message: "Final Term maximum 10 marks",
+    .refine((value) => Number(value) <= 50, {
+      message: "Final Term maximum 50 marks",
     })
     .default("0"),
 });

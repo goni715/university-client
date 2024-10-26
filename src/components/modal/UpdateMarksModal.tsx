@@ -7,29 +7,29 @@ import {
 import { useState } from "react";
 import { useAssignFacultyWithCourseMutation } from "../../redux/features/admin/courseManagement/courseFaculty/courseFacultyApi";
 import PHForm from "../form/PHForm";
-import PHMultiSelect from "../form/PHMultiSelect";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { useGetAllFacultiesQuery } from "../../redux/features/admin/faculty/facultyApi";
 import PHInput from "../form/PHInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { marksSchema } from "../../schemas/marks.schema";
+import { useUpdateEnrollCourseMarksMutation } from "../../redux/features/faculty/facultyCourseManagementApi";
 
-type TProps = {
-  courseId: string;
-};
-
-const UpdateMarksModal = (props: any) => {
+const UpdateMarksModal = ({ record }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: facultiesData, isLoading } = useGetAllFacultiesQuery(undefined);
-  const facultiesOptions = facultiesData?.data?.map(
-    (item: { _id: string; fullName: string }) => ({
-      value: item?._id,
-      label: item?.fullName,
-    })
-  );
+  const {
+    semesterRegistration,
+    offeredCourse,
+    studentId,
+    courseMarks: { classTest1, midTerm, classTest2, finalTerm },
+  } = record;
 
-  const [assignFacultyWithCourse, { isLoading: assignLoading }] =
-    useAssignFacultyWithCourseMutation();
+  const marksDefaultValues = {
+    classTest1: String(classTest1),
+    midTerm: String(midTerm),
+    classTest2: String(classTest2),
+    finalTerm: String(finalTerm),
+  };
+
+  const [assignFacultyWithCourse, { isLoading: assignLoading }] = useUpdateEnrollCourseMarksMutation()
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -41,7 +41,19 @@ const UpdateMarksModal = (props: any) => {
 
   //handleChancge status
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
+    const payload = {
+      semesterRegistration,
+      offeredCourse,
+      student: studentId,
+      courseMarks: {
+        classTest1: Number(data.classTest1),
+        midTerm: Number(data.midTerm),
+        classTest2: Number(data.classTest2),
+        finalTerm: Number(data.finalTerm)
+      },
+    };
+
+    console.log(payload);
     // const toastId = LoadingToast('Processing...')
 
     // try{
@@ -68,7 +80,11 @@ const UpdateMarksModal = (props: any) => {
         closable={false}
         footer={false}
       >
-        <PHForm onSubmit={onSubmit} resolver={zodResolver(marksSchema)}>
+        <PHForm
+          onSubmit={onSubmit}
+          defaultValues={marksDefaultValues}
+          resolver={zodResolver(marksSchema)}
+        >
           <PHInput type="text" name="classTest1" label="Class Text 1" />
           <PHInput type="text" name="midTerm" label="Mid Term" />
           <PHInput type="text" name="classTest2" label="Class Text 2" />
@@ -83,7 +99,6 @@ const UpdateMarksModal = (props: any) => {
             <Button
               key="submit"
               type="primary"
-              loading={isLoading}
               htmlType="submit"
               disabled={assignLoading}
             >

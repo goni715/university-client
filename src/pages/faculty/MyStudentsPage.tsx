@@ -10,6 +10,7 @@ type TTableDataType = {
   studentId: string;
   semesterRegistration:string;
   offeredCourse: string;
+  courseMarks: Record<string, unknown>
 }
 
 
@@ -20,7 +21,7 @@ const MyStudentsPage = () => {
     { name: 'course', value: courseId }
   ]);
 
-  const tableData = facultyCoursesData?.data?.map(({ _id, student, academicSemester, semesterRegistration, offeredCourse} : any)=> ({
+  const tableData = facultyCoursesData?.data?.map(({ _id, student, academicSemester, semesterRegistration, offeredCourse, courseMarks} : any)=> ({
     key:_id,
     name: student?.fullName,
     id: student?.id,
@@ -28,6 +29,7 @@ const MyStudentsPage = () => {
     semester: academicSemester?.name+" "+ academicSemester?.year,
     semesterRegistration: semesterRegistration?._id,
     offeredCourse: offeredCourse?._id,
+    courseMarks
 }));
 
 
@@ -53,9 +55,9 @@ const MyStudentsPage = () => {
         title: 'Action',
         key: "action",
         dataIndex: 'action',
-        render: (_param,{semesterRegistration, offeredCourse, studentId}) => (
+        render: (_param, record) => (
           <>
-          <UpdateMarksModal semesterRegistration={semesterRegistration} offeredCourse={offeredCourse} studentId={studentId} />
+          <UpdateMarksModal record={record} />
           </>
         )
     },
