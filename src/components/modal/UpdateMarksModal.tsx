@@ -5,7 +5,6 @@ import {
   SuccessToast,
 } from "../../helper/ValidationHelper";
 import { useState } from "react";
-import { useAssignFacultyWithCourseMutation } from "../../redux/features/admin/courseManagement/courseFaculty/courseFacultyApi";
 import PHForm from "../form/PHForm";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import PHInput from "../form/PHInput";
@@ -29,7 +28,7 @@ const UpdateMarksModal = ({ record }: any) => {
     finalTerm: String(finalTerm),
   };
 
-  const [assignFacultyWithCourse, { isLoading: assignLoading }] = useUpdateEnrollCourseMarksMutation()
+  const [ updateEnrollCourseMarks, { isLoading }] = useUpdateEnrollCourseMarksMutation()
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -53,22 +52,18 @@ const UpdateMarksModal = ({ record }: any) => {
       },
     };
 
-    console.log(payload);
-    // const toastId = LoadingToast('Processing...')
+    const toastId = LoadingToast('Processing...')
 
-    // try{
-    //   await assignFacultyWithCourse({
-    //     courseId,
-    //     data
-    //   }).unwrap();
+    try{
+      await updateEnrollCourseMarks(payload).unwrap();
 
-    //   handleCancel();//close modal
-    //   SuccessToast('Success', toastId);
-    // }
-    // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // catch(err){
-    //   ErrorToast("Something Went Wrong", toastId)
-    // }
+      handleCancel();//close modal
+      SuccessToast('Success', toastId);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    catch(err){
+      ErrorToast("Something Went Wrong", toastId)
+    }
   };
 
   return (
@@ -90,17 +85,16 @@ const UpdateMarksModal = ({ record }: any) => {
           <PHInput type="text" name="classTest2" label="Class Text 2" />
           <PHInput type="text" name="finalTerm" label="Final Term" />
           <div
-            style={{ display: "flex", justifyContent: "end", rowGap: "10px" }}
+            style={{ display: "flex", justifyContent: "end"}}
           >
-            <Button key="back" onClick={handleCancel}>
+            <Button key="back" onClick={handleCancel} style={{marginRight: '10px'}}>
               Cancel
             </Button>
-            ,
             <Button
               key="submit"
               type="primary"
               htmlType="submit"
-              disabled={assignLoading}
+              disabled={isLoading}
             >
               Confirm
             </Button>
